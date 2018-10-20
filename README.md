@@ -1,3 +1,3 @@
-# quarkonium
+# Quarkonium
 
-- 3rd year computing project to solve S.E. for quarkonium systems
+3rd year computing project to solve S.E. for quarkonium systems
