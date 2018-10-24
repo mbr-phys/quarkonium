@@ -47,28 +47,93 @@ def turningpoints(r, u):
 
     return maxes, minies, max_loc, min_loc
 
-#def nodes(maxima, minima, maxs, mins, u):
-#    if len(maxs) > 0 and len(mins) > 0:
-#        row = 0
-#        if maxima[0,0] < minima[0,0]:
-#            for q in range(len(maxima[:,0])-1):
-#                top = mins[q]
-#                btm = maxs[q]
-#                dr = np.zeros(top-btm)
-#                for p in range(top-btm):
-#                    o = btm + p
-#                    dr[p] = abs(u[o])
-#                nod = min(dr)
-#                for pi in range(top-btm):
-#                    if dr[pi] = nod:
-#
-#        else:
-#            for r in range(len(minima[:,0])-1):
-#
+def nodes(maxima, minima, maxs, mins, u, r):
+    if len(maxs) > 0 and len(mins) > 0:
+        no_nodes = len(maxs)+len(mins)-1
+        print "The number of nodes is %.f" % no_nodes
+        nodes_counter = 0
+        nod = np.zeros((no_nodes,2))
+        if maxima[0,0] < minima[0,0]:
+            q = 0
+            while nod[-1,0] == 0: 
+                if nodes_counter%2 == 0:
+                    print q
+                    qis = int(q - nodes_counter/2)
+                    top = mins[qis]
+                    btm = maxs[qis]
+                    rng = int(top-btm)
+                    dr = np.zeros(rng)
+                    for p in range(rng):
+                        o = int(btm + p)
+                        dr[p] = abs(u[o])
+                    nod[q,1] = min(dr)
+                    for pi in range(rng):
+                        if dr[pi] == nod[q,1]:
+                            oi = int(btm + pi)
+                            nod[q,0] = r[oi] 
+                            nod[q,1] = u[oi]
+                    nodes_counter += 1
+                    q+= 1
+                else:
+                    qis = int(q - (nodes_counter-1)/2)
+                    top = maxs[qis]
+                    btm = mins[qis-1]
+                    rng = int(top-btm)
+                    dr = np.zeros(rng)
+                    for p in range(rng):
+                        o = int(btm + p)
+                        dr[p] = abs(u[o])
+                    nod[q,1] = min(dr)
+                    for pi in range(rng):
+                        if dr[pi] == nod[q,1]:
+                            oi = int(btm + pi)
+                            nod[q,0] = r[oi] 
+                            nod[q,1] = u[oi]
+                    nodes_counter += 1
+                    q += 1
+            return nod
+        else:
+            q = 0
+            while nod[-1,0] == 0:
+                if nodes_counter%2 == 0:
+                    top = maxs[q]
+                    btm = mins[q]
+                    rng = int(top-btm)
+                    dr = np.zeros(rng)
+                    for p in range(rng):
+                        o = int(btm + p)
+                        dr[p] = abs(u[o])
+                    nod[q,1] = min(dr)
+                    for pi in range(rng):
+                        if dr[pi] == nod[q,1]:
+                            oi = int(btm + pi)
+                            nod[q,0] = r[oi] 
+                            nod[q,1] = u[oi]
+                    nodes_counter += 1
+                    q += 1
+                    print nodes_counter
+                else:
+                    top = mins[q]
+                    btm = maxs[q]
+                    rng = int(top-btm)
+                    dr = np.zeros(rng)
+                    for p in range(rng):
+                        o = int(btm + p)
+                        dr[p] = abs(u[o])
+                    nod[q,1] = min(dr)
+                    for pi in range(rng):
+                        if dr[pi] == nod[q,1]:
+                            oi = int(btm + pi)
+                            nod[q,0] = r[oi] 
+                            nod[q,1] = u[oi]
+                    nodes_counter += 1
+                    print nodes_counter
+                return nod
+    else:
+        print "There are no nodes for this function."
+ 
 '''
-    finish this
     to do:
-        when minima are first
-        carry on the index of node from u to find r value too 
         make whole thing run iterate to find beta/E based on expected turning points and nodes for known values of n and l
+        switch to while loops?
 '''

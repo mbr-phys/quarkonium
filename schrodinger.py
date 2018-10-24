@@ -3,8 +3,7 @@ import numpy as np
 from scipy.integrate import odeint
 from scipy.integrate import simps
 import matplotlib.pyplot as plt
-from myfunctions import wavefn
-from myfunctions import turningpoints
+from myfunctions import wavefn, turningpoints, nodes
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 
@@ -17,22 +16,22 @@ l = 0
 invmu = 1/m1 + 1/m2
 mu = 1/invmu
 alpha = 0.4
-be1 = 0
+be1 = 1e-02
 be2 = 1.5e-02
 be3 = 5e-03
 E = 3.0680 - 2.68
 
 a = l*(l+1)
 b = 2*mu*E
-#c = (8/3)*mu*alpha
-c = 2*mu/137
+c = (8/3)*mu*alpha
+#c = 2*mu/137
 d1 = 2*mu*be1
 d2 = 2*mu*be2
 d3 = 2*mu*be3
 
 sol1 = odeint(wavefn, u0, r, args=(a, b, c, d1)) #unl
-#sol2 = odeint(wavefn, u0, r, args=(a, b, c, d2)) #unl
-#sol3 = odeint(wavefn, u0, r, args=(a, b, c, d3)) #unl
+sol2 = odeint(wavefn, u0, r, args=(a, b, c, d2)) #unl
+sol3 = odeint(wavefn, u0, r, args=(a, b, c, d3)) #unl
 
 norm = 0
 for n in range(len(sol1)):
@@ -43,18 +42,23 @@ print prob
 
 sol1 = sol1/prob
 
-maxima, minima, maxs, mins = turningpoints(r,sol1[:,0])
+soli1 = sol1[:,0]
+maxima, minima, maxs, mins = turningpoints(r,soli1)
 for z in range(len(maxima[:,0])):
     print "Maxima No. %.f is found at r = %.2f, u = %.5f" % (z+1,maxima[z,0],maxima[z,1])
 
 for t in range(len(minima[:,0])):
     print "Minima No. %.f is found at r = %.2f, u = %.5f" % (t+1,minima[t,0],minima[t,1])
 
-#print r
-#print sol1
+noddy = nodes(maxima, minima, maxs, mins, soli1, r)
+numbers = len(noddy)
+for ns in range(numbers):
+    print "Node No. %.f is found at r = %.2f, u = %.5f" % (ns+1,noddy[ns,0], noddy[ns,1])
 
 plt.plot(r, sol1[:,0], 'b')
-plt.plot(r, sol1[:,1], 'r')
+#plt.plot(r, sol1[:,1], 'r')
+plt.plot((r[0],r[-1]),(0,0),'black')
 #plt.plot(r, turns, 'g')
-#plt.plot(r, sol3, 'g')
+plt.plot(r, sol2[:,0], 'r')
+plt.plot(r, sol3[:,0], 'g')
 plt.show()
