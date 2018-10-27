@@ -48,6 +48,7 @@ def turningpoints(r, u):
     return maxes, minies, max_loc, min_loc
 
 def nodes(maxima, minima, maxs, mins, u, r):
+    nod = np.zeros(2)
     if len(maxs) > 0 and len(mins) > 0:
         no_nodes = len(maxs)+len(mins)-1
         print "The number of nodes is %.f" % no_nodes
@@ -91,7 +92,7 @@ def nodes(maxima, minima, maxs, mins, u, r):
                             nod[q,1] = u[oi]
                     nodes_counter += 1
                     q += 1
-            return nod
+            return nod, no_nodes
         else:
             q = 0
             while nod[-1,0] == 0:
@@ -128,9 +129,11 @@ def nodes(maxima, minima, maxs, mins, u, r):
                             nod[q,1] = u[oi]
                     nodes_counter += 1
                     print nodes_counter
-                return nod
+                return nod, no_nodes
     else:
         print "There are no nodes for this function."
+        no_nodes = 0        
+        return nod, no_nodes
  
 '''
     to do:

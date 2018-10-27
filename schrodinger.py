@@ -19,7 +19,7 @@ alpha = 0.4
 be1 = 1e-02
 be2 = 1.5e-02
 be3 = 5e-03
-E = 3.0680 - 2.68
+E = 0.0010
 
 a = l*(l+1)
 b = 2*mu*E
@@ -50,10 +50,13 @@ for z in range(len(maxima[:,0])):
 for t in range(len(minima[:,0])):
     print "Minima No. %.f is found at r = %.2f, u = %.5f" % (t+1,minima[t,0],minima[t,1])
 
-noddy = nodes(maxima, minima, maxs, mins, soli1, r)
-numbers = len(noddy)
-for ns in range(numbers):
-    print "Node No. %.f is found at r = %.2f, u = %.5f" % (ns+1,noddy[ns,0], noddy[ns,1])
+noddy, numbs = nodes(maxima, minima, maxs, mins, soli1, r)
+if numbs == 0:
+    print "There are no nodes for this function."
+else:
+    numbers = len(noddy)
+    for ns in range(numbers):
+        print "Node No. %.f is found at r = %.2f, u = %.5f" % (ns+1,noddy[ns,0], noddy[ns,1])
 
 plt.plot(r, sol1[:,0], 'b')
 #plt.plot(r, sol1[:,1], 'r')
