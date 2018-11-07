@@ -3,6 +3,7 @@
 
 from __future__ import division
 import numpy as np
+from scipy.integrate import odeint
 
 def wavefn(u0, r, a, b, c, d):
     '''
@@ -48,6 +49,10 @@ def turningpoints(r, u):
     return maxes, minies, max_loc, min_loc
 
 def nodes(maxima, minima, maxs, mins, u, r):
+    '''
+        Function to calculate the number of nodes of a function,
+        and find their coordinates
+    '''
     nod = np.zeros(2)
     if len(maxs) > 0 and len(mins) > 0:
         no_nodes = len(maxs)+len(mins)-1
@@ -135,8 +140,69 @@ def nodes(maxima, minima, maxs, mins, u, r):
         no_nodes = 0        
         return nod, no_nodes
  
-'''
-    to do:
-        make whole thing run iterate to find beta/E based on expected turning points and nodes for known values of n and l
-        switch to while loops?
-'''
+def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r):
+    '''
+        iterate wavefunction solution over energies to find correct energy for expected nodes and turning points
+    '''
+    a = l*(l+1)
+    c = 2*mu*alpha
+    d = 2*mu*beta
+
+    q = 0
+    i = 0
+    while i==0:
+        if q > 1000:
+            print "Iterative solution took too long to find"
+            break 
+        b1 = -2*mu*E1
+        b2 = -2*mu*E2
+        b3 = -2*mu*E3
+
+        sol1 = odeint(wavefn, u0, r, args=(a,b1,c,d))
+        sol2 = odeint(wavefn, u0, r, args=(a,b2,c,d))
+        sol3 = odeint(wavefn, u0, r, args=(a,b3,c,d))
+
+        soli1 = sol1[:,0]
+        soli2 = sol2[:,0]
+        soli3 = sol3[:,0]
+        
+        maxi1, mini1, maxs1, mins1 = turningpoints(r, soli1)
+        maxi2, mini2, maxs2, mins2 = turningpoints(r, soli2)
+        maxi3, mini3, maxs3, mins3 = turningpoints(r, soli3)
+    
+        noddy1, numbs1 = nodes(maxi1, mini1, maxs1, mins1, soli1, r)
+        noddy2, numbs2 = nodes(maxi2, mini2, maxs2, mins2, soli2, r)
+        noddy3, numbs3 = nodes(maxi3, mini3, maxs3, mins3, soli3, r)
+    
+        tps1 = len(maxi1) + len(mini1)
+        tps2 = len(maxi2) + len(mini2)
+        tps3 = len(maxi3) + len(mini3)
+    
+        if numbs1 != numbs2 and tps1 != tps2:
+            E3 = E2
+            E2 = (E1 + E2)/2
+            q += 1
+        elif numbs2 != numbs3 and tps2 != tps3:
+            E1 = E2
+            E2 = (E2 + E3)/2
+            q += 1
+        else:
+            if numbs1 == (n-1) and tps1 == n:
+                print "Found iterative solution"
+                break
+            elif numbs2 == (n-1) and tps2 == n:
+                print "Found iterative solution"
+                break
+            elif numbs3 == (n-1) and tps3 == n:
+                print "Found iterative solution"
+                break
+            else:
+                print "No solution found with E1,2,3 = %.e, %.e, %.e" % (E1, E2, E3)
+                delta = E2 - E1
+                E1 = E3
+                E2 = E1 + delta
+                E3 = E2 + delta
+                q += 1
+            
+    return soli1, soli2, soli3, E1, E2, E3
+    
