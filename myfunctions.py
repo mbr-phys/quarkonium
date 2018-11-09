@@ -25,9 +25,9 @@ def turningpoints(r, u, n, l):
     if n == 1:
         tolerance = 1e-14
     elif n == 2 and l == 0:
-        tolerance = 1e-13
+        tolerance = 1e-12
     else:
-        tolerance = 1e-18
+        tolerance = 1e-16
     for i in range(len(u)-2): #maybe look at specifying this more?
         if u[i] - u[i+1] < -1*tolerance and u[i+2] - u[i+1] < -1*tolerance:
             maxs += 1
@@ -228,7 +228,10 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
                     print "Energies converged"
                     if n == 2:
                         E1 = 5e-6
-                        boom = E1/2
+                        boom = E1/3
+                    elif n == 3:
+                        E1 = 3e-6
+                        boom = E1/3
                     E3 = E1
                     E2 = E3 - boom
                     E1 = E2 - boom

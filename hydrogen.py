@@ -8,7 +8,7 @@ from myfunctions import wavefn, turningpoints, nodes, itera, normaliser
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 
-r = np.linspace(0.01, 2900, 1000)
+r = np.linspace(0.001, 3500, 1000)
 step = r[1] - r[0] #step size for normalisation
 
 n = float(input("n = "))
@@ -20,10 +20,14 @@ if n == 1:
     E1 = 1e-5
     E2 = 2.5e-5
     E3 = 5e-5
-elif n == 2:
-    E1 = 1e-6
-    E2 = 2.5e-6
-    E3 = 5e-6
+elif n == 2 and l == 0:
+    E1 = 2e-6
+    E2 = 3e-6
+    E3 = 4e-6
+elif n == 2 and l == 1:
+    E1 = 3e-6
+    E2 = 3.25e-6
+    E3 = 3.5e-6
 elif n >= 3:
     E1 = 0.5e-6
     E2 = 1.25e-6
@@ -35,14 +39,14 @@ else:
 
 sol1, sol2, sol3, du1, du2, du3, En1, En2, En3 = itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step)
 
-maxima, minima, maxs, mins = turningpoints(r,sol3,n,l)
+maxima, minima, maxs, mins = turningpoints(r,sol2,n,l)
 for z in range(len(maxima[:,0])):
     print "Maxima No. %.f is found at r = %.2f, u = %.5e" % (z+1,maxima[z,0],maxima[z,1])
 
 for t in range(len(minima[:,0])):
     print "Minima No. %.f is found at r = %.2f, u = %.5e" % (t+1,minima[t,0],minima[t,1])
 
-noddy, numbs = nodes(maxima, minima, maxs, mins, sol3, r)
+noddy, numbs = nodes(maxima, minima, maxs, mins, sol2, r)
 if numbs != 0:
     numbers = len(noddy)
     for ns in range(numbers):
@@ -51,6 +55,8 @@ if numbs != 0:
 print En1
 print En2
 print En3 
+
+#print sol2
 
 plt.plot(r, sol1, 'b')
 plt.plot(r, sol2, 'r')

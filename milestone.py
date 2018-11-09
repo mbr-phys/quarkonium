@@ -23,37 +23,36 @@ mu = 1/invmu
 #alpha = 1/137
 alpha = 0.4
 beta = 0
-E1 = 1e-2
-E2 = 1e-3
-E3 = 1e-4
+E1 = 1.5e-6
+E2 = 1.5e-6
+E3 = 1.5e-6
 
-sol1, sol2, sol3 = itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r)
+a = l*(l+1)
+b1 = -2*mu*E1
+b2 = -2*mu*E2
+b3 = -2*mu*E3
+c = 2*mu*alpha
+d = 2*mu*beta
+
+sol1 = odeint(wavefn, u0, r, args=(a,b1,d,c))
 
 norm1 = 0
-norm2 = 0
-norm3 = 0
 print len(sol1)
 for n in range(len(sol1)-1):
     norm1 = norm1 + abs(sol1[n])**2
-    norm2 = norm2 + abs(sol2[n])**2
-    norm3 = norm3 + abs(sol3[n])**2
 
 prob1 = norm1*step
-prob2 = norm2*step
-prob3 = norm3*step
 
 sol1 = sol1/prob1
-sol2 = sol2/prob2
-sol3 = sol3/prob3
 
-maxima, minima, maxs, mins = turningpoints(r,sol2)
+maxima, minima, maxs, mins = turningpoints(r,sol1)
 for z in range(len(maxima[:,0])):
     print "Maxima No. %.f is found at r = %.2f, u = %.5f" % (z+1,maxima[z,0],maxima[z,1])
 
 for t in range(len(minima[:,0])):
     print "Minima No. %.f is found at r = %.2f, u = %.5f" % (t+1,minima[t,0],minima[t,1])
 
-noddy, numbs = nodes(maxima, minima, maxs, mins, sol2, r)
+noddy, numbs = nodes(maxima, minima, maxs, mins, sol1, r)
 if numbs == 0:
     print "There are no nodes for this function."
 else:
@@ -62,6 +61,4 @@ else:
         print "Node No. %.f is found at r = %.2f, u = %.5f" % (ns+1,noddy[ns,0], noddy[ns,1])
 
 plt.plot(r, sol1, 'b')
-plt.plot(r, sol2, 'r')
-plt.plot(r, sol3, 'g')
 plt.show()
