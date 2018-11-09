@@ -3,6 +3,7 @@
 
 from __future__ import division
 import numpy as np
+import math
 from scipy.integrate import odeint
 
 def wavefn(u0, r, a, b, c, d):
@@ -13,7 +14,7 @@ def wavefn(u0, r, a, b, c, d):
     dv = [v, (a/r**2)*u - b*u - (c/r)*u + d*r*u]
     return dv
 
-def turningpoints(r, u):
+def turningpoints(r, u, n, l):
     '''
         Evaluates any maxima and minima a function may have, printing how many of each and returning coords of them
     '''
@@ -21,12 +22,18 @@ def turningpoints(r, u):
     min_loc = []
     maxs = 0
     max_loc = []
+    if n == 1:
+        tolerance = 1e-14
+    elif n == 2 and l == 0:
+        tolerance = 1e-13
+    else:
+        tolerance = 1e-18
     for i in range(len(u)-2): #maybe look at specifying this more?
-        if u[i] < u[i+1] and u[i+2] < u[i+1]:
+        if u[i] - u[i+1] < -1*tolerance and u[i+2] - u[i+1] < -1*tolerance:
             maxs += 1
             maxi = i+1
             max_loc = np.append(max_loc,maxi)
-        elif u[i] > u[i+1] and u[i+2] > u[i+1]:
+        elif u[i] - u[i+1] > tolerance and u[i+2] - u[i+1] > tolerance:
             mins += 1
             mini = i+1
             min_loc = np.append(min_loc,mini)
@@ -63,7 +70,6 @@ def nodes(maxima, minima, maxs, mins, u, r):
             q = 0
             while nod[-1,0] == 0: 
                 if nodes_counter%2 == 0:
-                    print q
                     qis = int(q - nodes_counter/2)
                     top = mins[qis]
                     btm = maxs[qis]
@@ -117,7 +123,6 @@ def nodes(maxima, minima, maxs, mins, u, r):
                             nod[q,1] = u[oi]
                     nodes_counter += 1
                     q += 1
-                    print nodes_counter
                 else:
                     top = mins[q]
                     btm = maxs[q]
@@ -133,14 +138,13 @@ def nodes(maxima, minima, maxs, mins, u, r):
                             nod[q,0] = r[oi] 
                             nod[q,1] = u[oi]
                     nodes_counter += 1
-                    print nodes_counter
                 return nod, no_nodes
     else:
         print "There are no nodes for this function."
         no_nodes = 0        
         return nod, no_nodes
  
-def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r):
+def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
     '''
         iterate wavefunction solution over energies to find correct energy for expected nodes and turning points
     '''
@@ -151,9 +155,13 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r):
     q = 0
     i = 0
     while i==0:
-        if q > 1000:
+        if q > 2000:
             print "Iterative solution took too long to find"
-            break 
+            break
+        if E1 == E2:
+            E3 = E2
+        elif E3 == E2:
+            E1 = E2
         b1 = -2*mu*E1
         b2 = -2*mu*E2
         b3 = -2*mu*E3
@@ -165,10 +173,18 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r):
         soli1 = sol1[:,0]
         soli2 = sol2[:,0]
         soli3 = sol3[:,0]
+
+        du1 = sol1[:,1]
+        du2 = sol2[:,1]
+        du3 = sol3[:,1]
+
+        soli1, du1 = normaliser(soli1, du1, step)
+        soli2, du2 = normaliser(soli2, du2, step)
+        soli3, du3 = normaliser(soli3, du3, step)
         
-        maxi1, mini1, maxs1, mins1 = turningpoints(r, soli1)
-        maxi2, mini2, maxs2, mins2 = turningpoints(r, soli2)
-        maxi3, mini3, maxs3, mins3 = turningpoints(r, soli3)
+        maxi1, mini1, maxs1, mins1 = turningpoints(r, soli1,n,l)
+        maxi2, mini2, maxs2, mins2 = turningpoints(r, soli2,n,l)
+        maxi3, mini3, maxs3, mins3 = turningpoints(r, soli3,n,l)
     
         noddy1, numbs1 = nodes(maxi1, mini1, maxs1, mins1, soli1, r)
         noddy2, numbs2 = nodes(maxi2, mini2, maxs2, mins2, soli2, r)
@@ -177,32 +193,71 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r):
         tps1 = len(maxi1) + len(mini1)
         tps2 = len(maxi2) + len(mini2)
         tps3 = len(maxi3) + len(mini3)
-    
-        if numbs1 != numbs2 and tps1 != tps2:
+
+        if numbs1 != numbs2 or tps1 != tps2:
             E3 = E2
-            E2 = (E1 + E2)/2
+            E2 = (E1 + E3)/2
             q += 1
-        elif numbs2 != numbs3 and tps2 != tps3:
+        elif numbs2 != numbs3 or tps2 != tps3:
             E1 = E2
-            E2 = (E2 + E3)/2
+            E2 = (E1 + E3)/2
             q += 1
         else:
-            if numbs1 == (n-1) and tps1 == n:
+            if numbs1 == (n-l-1) and tps1 == (n-l):
                 print "Found iterative solution"
                 break
-            elif numbs2 == (n-1) and tps2 == n:
+            elif numbs2 == (n-l-1) and tps2 == (n-l):
                 print "Found iterative solution"
                 break
-            elif numbs3 == (n-1) and tps3 == n:
+            elif numbs3 == (n-l-1) and tps3 == (n-l):
                 print "Found iterative solution"
                 break
             else:
-                print "No solution found with E1,2,3 = %.e, %.e, %.e" % (E1, E2, E3)
-                delta = E2 - E1
-                E1 = E3
-                E2 = E1 + delta
-                E3 = E2 + delta
+                print "No solution found with E1,2,3 = %.3e, %.3e, %.3e" % (E1, E2, E3)
+                delta = E3 - E1
+                if E1 != 0:
+                    odmag = int(math.floor(math.log10(abs(E1))))
+                elif E2 != 0:
+                    odmag = int(math.floor(math.log10(abs(E2))))
+                elif E3 != 0:
+                    odmag = int(math.floor(math.log10(abs(E3))))
+                else: 
+                    odmag = int(input("Energies converged to 0, give new order of magnitude: "))
+                    E1 = 5*10**odmag
+                if delta < 1e-18:
+                    print "Energies converged"
+                    if n == 2:
+                        E1 = 5e-6
+                        boom = E1/2
+                    E3 = E1
+                    E2 = E3 - boom
+                    E1 = E2 - boom
+                else:
+                    boom = 0.25*10**odmag
+                    E3 = E1
+                    E2 = E3 - boom
+                    E1 = E2 - boom
+                if E1 < 0:
+                    E1 = -1*E1
+                if E2 < 0:
+                    E2 = -1*E2
+                if E3 < 0:
+                    E3 = -1*E3
                 q += 1
-            
-    return soli1, soli2, soli3, E1, E2, E3
+                            
+    return soli1, soli2, soli3, du1, du2, du3, E1, E2, E3
     
+def normaliser(wvfn, dwv, step):
+    '''
+        Gonna normalise those wavefns
+    '''
+    norm = 0
+    for n in range(len(wvfn)):
+        norm = norm + abs(wvfn[n])**2
+
+    prob = norm*step
+    
+    wvfn = wvfn/prob
+    dwv = dwv/prob
+
+    return wvfn, dwv

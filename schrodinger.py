@@ -17,10 +17,10 @@ l = float(input("l = "))
 invmu = 1/m1 + 1/m2
 mu = 1/invmu
 alpha = 0.4*4/3
-beta = 0
-E1 = 0.0001
-E2 = 0.00015
-E3 = 0.0002
+beta = 0.01
+E1 = 0.01
+E2 = 0.015
+E3 = 0.02
 
 sol1, sol2, sol3, En1, En2, En3 = itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r)
 
@@ -52,8 +52,8 @@ print En1
 print En2
 print En3 
 
-#plt.plot(r, sol1, 'b')
+plt.plot(r, sol1, 'b')
 #plt.plot((r[0],r[-1]),(0,0),'black')
 plt.plot(r, sol2, 'r')
-#plt.plot(r, sol3, 'g')
+plt.plot(r, sol3, 'g')
 plt.show()
