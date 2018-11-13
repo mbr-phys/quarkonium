@@ -25,7 +25,7 @@ def turningpoints(r, u, n, l):
     if n == 1:
         tolerance = 1e-14
     elif n == 2 and l == 0:
-        tolerance = 1e-12
+        tolerance = 1e-11
     else:
         tolerance = 1e-16
     for i in range(len(u)-2): #maybe look at specifying this more?
@@ -50,8 +50,8 @@ def turningpoints(r, u, n, l):
         minies[y,0] = r[hunt]
         minies[y,1] = u[hunt]
 
-    print "The number of maxima is %.f" % maxs
-    print "The number of minima is %.f" % mins
+    print "    The number of maxima is %.f" % maxs
+    print "    The number of minima is %.f" % mins
 
     return maxes, minies, max_loc, min_loc
 
@@ -63,12 +63,12 @@ def nodes(maxima, minima, maxs, mins, u, r):
     nod = np.zeros(2)
     if len(maxs) > 0 and len(mins) > 0:
         no_nodes = len(maxs)+len(mins)-1
-        print "The number of nodes is %.f" % no_nodes
+        print "    The number of nodes is %.f" % no_nodes
         nodes_counter = 0
         nod = np.zeros((no_nodes,2))
         if maxima[0,0] < minima[0,0]:
             q = 0
-            while nod[-1,0] == 0: 
+            while nod[-1,0] == 0:
                 if nodes_counter%2 == 0:
                     qis = int(q - nodes_counter/2)
                     top = mins[qis]
@@ -82,7 +82,7 @@ def nodes(maxima, minima, maxs, mins, u, r):
                     for pi in range(rng):
                         if dr[pi] == nod[q,1]:
                             oi = int(btm + pi)
-                            nod[q,0] = r[oi] 
+                            nod[q,0] = r[oi]
                             nod[q,1] = u[oi]
                     nodes_counter += 1
                     q+= 1
@@ -99,7 +99,7 @@ def nodes(maxima, minima, maxs, mins, u, r):
                     for pi in range(rng):
                         if dr[pi] == nod[q,1]:
                             oi = int(btm + pi)
-                            nod[q,0] = r[oi] 
+                            nod[q,0] = r[oi]
                             nod[q,1] = u[oi]
                     nodes_counter += 1
                     q += 1
@@ -119,7 +119,7 @@ def nodes(maxima, minima, maxs, mins, u, r):
                     for pi in range(rng):
                         if dr[pi] == nod[q,1]:
                             oi = int(btm + pi)
-                            nod[q,0] = r[oi] 
+                            nod[q,0] = r[oi]
                             nod[q,1] = u[oi]
                     nodes_counter += 1
                     q += 1
@@ -135,15 +135,15 @@ def nodes(maxima, minima, maxs, mins, u, r):
                     for pi in range(rng):
                         if dr[pi] == nod[q,1]:
                             oi = int(btm + pi)
-                            nod[q,0] = r[oi] 
+                            nod[q,0] = r[oi]
                             nod[q,1] = u[oi]
                     nodes_counter += 1
                 return nod, no_nodes
     else:
-        print "There are no nodes for this function."
-        no_nodes = 0        
+        print "    There are no nodes for this function."
+        no_nodes = 0
         return nod, no_nodes
- 
+
 def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
     '''
         iterate wavefunction solution over energies to find correct energy for expected nodes and turning points
@@ -178,18 +178,18 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
         du2 = sol2[:,1]
         du3 = sol3[:,1]
 
-        soli1, du1 = normaliser(soli1, du1, step)
-        soli2, du2 = normaliser(soli2, du2, step)
-        soli3, du3 = normaliser(soli3, du3, step)
-        
+        soli1, du1, norm1 = normaliser(soli1, du1, step)
+        soli2, du2, norm2 = normaliser(soli2, du2, step)
+        soli3, du3, norm3 = normaliser(soli3, du3, step)
+
         maxi1, mini1, maxs1, mins1 = turningpoints(r, soli1,n,l)
         maxi2, mini2, maxs2, mins2 = turningpoints(r, soli2,n,l)
         maxi3, mini3, maxs3, mins3 = turningpoints(r, soli3,n,l)
-    
+
         noddy1, numbs1 = nodes(maxi1, mini1, maxs1, mins1, soli1, r)
         noddy2, numbs2 = nodes(maxi2, mini2, maxs2, mins2, soli2, r)
         noddy3, numbs3 = nodes(maxi3, mini3, maxs3, mins3, soli3, r)
-    
+
         tps1 = len(maxi1) + len(mini1)
         tps2 = len(maxi2) + len(mini2)
         tps3 = len(maxi3) + len(mini3)
@@ -221,7 +221,7 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
                     odmag = int(math.floor(math.log10(abs(E2))))
                 elif E3 != 0:
                     odmag = int(math.floor(math.log10(abs(E3))))
-                else: 
+                else:
                     odmag = int(input("Energies converged to 0, give new order of magnitude: "))
                     E1 = 5*10**odmag
                 if delta < 1e-18:
@@ -247,9 +247,9 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
                 if E3 < 0:
                     E3 = -1*E3
                 q += 1
-                            
-    return soli1, soli2, soli3, du1, du2, du3, E1, E2, E3
-    
+
+    return soli2, du2, E2, norm2
+
 def normaliser(wvfn, dwv, step):
     '''
         Gonna normalise those wavefns
@@ -259,8 +259,34 @@ def normaliser(wvfn, dwv, step):
         norm = norm + abs(wvfn[n])**2
 
     prob = norm*step
-    
+
     wvfn = wvfn/prob
     dwv = dwv/prob
 
-    return wvfn, dwv
+    norm = 0
+    for n in range(len(wvfn)):
+        norm = norm + abs(wvfn[n])**2
+
+    return wvfn, dwv, norm
+
+def statement(wvfn,n,l,r,E,normie):
+    '''
+        Statement of maxima, minima, nodes, and energy of functions
+    '''
+    print "For (n,l) = (%.f,%.f):" % (n,l)
+    maxima, minima, maxs, mins = turningpoints(r,wvfn,n,l)
+    for z in range(len(maxima[:,0])):
+        print "    Maxima No. %.f is found at r = %.2f, u = %.5e" % (z+1,maxima[z,0],maxima[z,1])
+
+    for t in range(len(minima[:,0])):
+        print "    Minima No. %.f is found at r = %.2f, u = %.5e" % (t+1,minima[t,0],minima[t,1])
+
+    noddy, numbs = nodes(maxima, minima, maxs, mins, wvfn, r)
+    if numbs != 0:
+        numbers = len(noddy)
+        for ns in range(numbers):
+            print "    Node No. %.f is found at r = %.2f, u = %.5e" % (ns+1,noddy[ns,0], noddy[ns,1])
+
+    print "    The energy of this state is %.4e" % E
+
+    return None
