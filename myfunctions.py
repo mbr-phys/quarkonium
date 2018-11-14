@@ -178,9 +178,9 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
         du2 = sol2[:,1]
         du3 = sol3[:,1]
 
-        soli1, du1, norm1 = normaliser(soli1, du1, step)
-        soli2, du2, norm2 = normaliser(soli2, du2, step)
-        soli3, du3, norm3 = normaliser(soli3, du3, step)
+        soli1, du1 = normaliser(soli1, du1, step, n,l,r)
+        soli2, du2 = normaliser(soli2, du2, step,n,l,r)
+        soli3, du3 = normaliser(soli3, du3, step,n,l,r)
 
         maxi1, mini1, maxs1, mins1 = turningpoints(r, soli1,n,l)
         maxi2, mini2, maxs2, mins2 = turningpoints(r, soli2,n,l)
@@ -248,28 +248,32 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
                     E3 = -1*E3
                 q += 1
 
-    return soli2, du2, E2, norm2
+    return soli2, du2, E2
 
-def normaliser(wvfn, dwv, step):
+def normaliser(wvfn, dwv, step, n, l, r):
     '''
         Gonna normalise those wavefns
     '''
+    if n == 2 and l == 1:
+        for rs in range(len(r)):
+            if r[rs] > 3000:
+                break
+        wvfn_new = wvfn[:rs]
+    else: 
+        wvfn_new = wvfn
+
     norm = 0
-    for n in range(len(wvfn)):
-        norm = norm + abs(wvfn[n])**2
+    for n in range(len(wvfn_new)):
+        norm = norm + abs(wvfn_new[n])**2
 
     prob = norm*step
 
     wvfn = wvfn/prob
     dwv = dwv/prob
 
-    norm = 0
-    for n in range(len(wvfn)):
-        norm = norm + abs(wvfn[n])**2
+    return wvfn, dwv
 
-    return wvfn, dwv, norm
-
-def statement(wvfn,n,l,r,E,normie):
+def statement(wvfn,n,l,r,E):
     '''
         Statement of maxima, minima, nodes, and energy of functions
     '''
@@ -290,3 +294,15 @@ def statement(wvfn,n,l,r,E,normie):
     print "    The energy of this state is %.4e" % E
 
     return None
+
+def sqr(wvfn):
+    '''
+        Returns square of wavefunction
+    '''
+    
+    prob_dens = np.zeros(wvfn.shape)
+    for ni in range(len(wvfn)):
+        prob_dens[ni] = abs(wvfn[ni])**2
+
+    return prob_dens
+
