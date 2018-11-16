@@ -4,7 +4,7 @@
 from __future__ import division
 import numpy as np
 import math
-from scipy.integrate import odeint
+from scipy.integrate import odeint,simps
 
 def wavefn(u0, r, a, b, c, d):
     '''
@@ -270,6 +270,24 @@ def normaliser(wvfn, dwv, step, n, l, r):
 
     wvfn = wvfn/prob
     dwv = dwv/prob
+
+    return wvfn, dwv
+
+def simpson(wvfn,dwv,n,l,r):
+    '''
+        Stuff
+    '''
+    if n == 2 and l == 1:
+        for rs in range(len(r)):
+            if r[rs] > 3200:
+                rt = r[:rs]
+                w2 = wvfn[:rs]
+                break
+        norm = simps(w2,rt,even='first')
+    else:
+        norm = simps(wvfn,r,even='first')
+    wvfn = wvfn/norm
+    dwv = dwv/norm
 
     return wvfn, dwv
 

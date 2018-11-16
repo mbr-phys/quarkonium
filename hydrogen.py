@@ -1,10 +1,9 @@
 from __future__ import division
 import numpy as np
 import math
-from scipy.integrate import odeint
-from scipy.integrate import simps
+from scipy.integrate import odeint, simps
 import matplotlib.pyplot as plt
-from myfunctions import wavefn, turningpoints, nodes, itera, normaliser, statement, sqr
+from hfns import wavefn, turningpoints, nodes, itera, normaliser, statement, sqr, simpson
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 
@@ -47,12 +46,16 @@ sol_1, du_1, En_1 = itera(1, 0, E11, E12, E13, u0, alpha, beta, mu, r1, step1)
 sol_20, du_20, En_20 = itera(2, 0, E01, E02, E03, u0, alpha, beta, mu, r2, step2)
 sol_21, du_21, En_21 = itera(2, 1, E21, E22, E23, u0, alpha, beta, mu, r2, step2)
 
+sol_1,du_1 = simpson(sol_1,du_1,1,0,r1)
+sol_20,du_20 = simpson(sol_20,du_20,2,0,r2)
+sol_21,du_21 = simpson(sol_21,du_21,2,1,r2)
+
 statement(sol_1,1,0,r1,En_1)
 statement(sol_20,2,0,r2,En_20)
 statement(sol_21,2,1,r2,En_21)
 
-sol_21 = sol_21*5e5
-sol_20 = sol_20*2
+#sol_21 = sol_21*5e5
+#sol_20 = sol_20*2
 
 En_1 = En_1*-1e6
 En_20 = En_20*-1e6
@@ -72,7 +75,7 @@ sol_21 = sol_21[:cut_off]
 pr20 = pr20[:cut_off]
 pr21 = pr21[:cut_off]
 
-f1 = plt.figure(1)
+f1 = plt.figure(1,figsize=(8,6))
 plt.plot(r1, sol_1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.1f eV" % En_1)
 plt.plot(r2, sol_20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.2f eV" % En_20)
 plt.plot(r2, sol_21, 'g',label="(n,l) = (2,1), $E_{nl} =$ %.2f eV" % En_21)
@@ -84,7 +87,7 @@ plt.title("Solutions of the Hydrogen Electron Radial Wavefunction",fontsize='x-l
 plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize='x-large')
 plt.ylabel("$u_{nl}(r)$",fontsize='x-large')
 
-f2 = plt.figure(2)
+f2 = plt.figure(2,figsize=(8,6))
 plt.plot(r1, pr1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.1f eV" % En_1)
 plt.plot(r2, pr20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.2f eV" % En_20)
 plt.plot(r2, pr21, 'g',label="(n,l) = (2,1), $E_{nl} =$ %.2f eV" % En_21)
@@ -97,9 +100,3 @@ plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize='x-large')
 plt.ylabel("$|u_{nl}(r)|^2$",fontsize='x-large')
 
 plt.show()
-
-
-
-#plt.plot(r,du1,'orange')
-#plt.plot(r,du2,'purple')
-#plt.plot(r,du3,'grey')
