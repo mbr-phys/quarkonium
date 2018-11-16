@@ -4,7 +4,7 @@ import math
 from scipy.integrate import odeint
 from scipy.integrate import simps
 import matplotlib.pyplot as plt
-from myfunctions import wavefn, turningpoints, nodes, itera, normaliser, statement, sqr
+from hfns import wavefn, turningpoints, nodes, itera, normaliser, statement, sqr
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 
@@ -72,7 +72,7 @@ sol_21 = sol_21[:cut_off]
 pr20 = pr20[:cut_off]
 pr21 = pr21[:cut_off]
 
-f1 = plt.figure(1)
+f1 = plt.figure(1,figsize=(8,6))
 plt.plot(r1, sol_1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.1f eV" % En_1)
 plt.plot(r2, sol_20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.2f eV" % En_20)
 plt.plot(r2, sol_21, 'g',label="(n,l) = (2,1), $E_{nl} =$ %.2f eV" % En_21)
@@ -84,7 +84,7 @@ plt.title("Solutions of the Hydrogen Electron Radial Wavefunction",fontsize='x-l
 plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize='x-large')
 plt.ylabel("$u_{nl}(r)$",fontsize='x-large')
 
-f2 = plt.figure(2)
+f2 = plt.figure(2,figsize=(8,6))
 plt.plot(r1, pr1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.1f eV" % En_1)
 plt.plot(r2, pr20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.2f eV" % En_20)
 plt.plot(r2, pr21, 'g',label="(n,l) = (2,1), $E_{nl} =$ %.2f eV" % En_21)
