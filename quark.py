@@ -14,21 +14,24 @@ r2 = np.linspace(0.001, 4500, 1000)
 
 step1 = r1[1] - r1[0] #step size for normalisation
 step2 = r2[1] - r2[0]
-mu = 0.511
-alpha = 1/137
-beta = 0
+m1 = 1.34
+m2 = 1.34
+invmu = 1/m1 + 1/m2
+mu = 1/invmu
+alpha = 0.4
+beta = 0.01
 #if n == 1:
-E11 = 1e-5
-E12 = 2.5e-5
-E13 = 5e-5
+E11 = 1e-2
+E12 = 2.5e-2
+E13 = 5e-2
 #elif n == 2 and l == 0:
-E01 = 3e-6
-E02 = 3.5e-6
-E03 = 4e-6
+E01 = 3e-3
+E02 = 3.5e-3
+E03 = 4e-3
 #elif n == 2 and l == 1:
-E21 = 3e-6
-E22 = 3.25e-6
-E23 = 3.5e-6
+E21 = 3e-3
+E22 = 3.25e-3
+E23 = 3.5e-3
 #elif n == 3:
 #    E1 = 1e-6
 #    E2 = 1.5e-6

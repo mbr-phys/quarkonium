@@ -20,6 +20,7 @@
         - ![Plot](/images/probs.png "Energies on plot as well")
 
 - [ ] Presentation
+    - beamer slide show made with notes to read
 
 - [ ] Program Extension
     - [ ] Apply program to Charmonium - need to iterate over beta now instead of E
