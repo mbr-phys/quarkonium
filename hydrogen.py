@@ -3,77 +3,52 @@ import numpy as np
 import math
 from scipy.integrate import odeint, simps
 import matplotlib.pyplot as plt
-from hfns import wavefn, turningpoints, nodes, itera, normaliser, sqr, simpson
+from hfnsave import wavefn, turningpoints, nodes, itera, normaliser, sqr, simpson
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 
-#n = float(input("n = "))
-#l = float(input("l = "))
 r1 = np.linspace(0.001, 3200, 1000)
-r2 = np.linspace(0.001, 4500, 1000)
+r2 = np.linspace(0.001, 5200, 1000)
 
 step1 = r1[1] - r1[0] #step size for normalisation
 step2 = r2[1] - r2[0]
 mu = 0.511
 alpha = 1/137
 beta = 0
-#if n == 1:
+
 E11 = 1e-5
 E12 = 2.5e-5
 E13 = 5e-5
-#elif n == 2 and l == 0:
+
 E01 = 3e-6
 E02 = 3.5e-6
 E03 = 4e-6
-#elif n == 2 and l == 1:
+
 E21 = 3e-6
 E22 = 3.25e-6
 E23 = 3.5e-6
-#elif n == 3:
-#    E1 = 1e-6
-#    E2 = 1.5e-6
-#    E3 = 2e-6
-#elif n > 3 and n < 6:
-#    E1 = 0.5e-6
-#    E2 = 1.25e-6
-#    E3 = 2e-6
-#else:
-#    E1 = 1e-7
-#    E2 = 5e-7
-#    E3 = 1e-6
 
-sol_1, du_1, En_1 = itera(1, 0, E11, E12, E13, u0, alpha, beta, mu, r1, step1)
-sol_20, du_20, En_20 = itera(2, 0, E01, E02, E03, u0, alpha, beta, mu, r2, step2)
-sol_21, du_21, En_21 = itera(2, 1, E21, E22, E23, u0, alpha, beta, mu, r2, step2)
+sol_1, du1, En_1 = itera(1, 0, E11, E12, E13, u0, alpha, beta, mu, r1, step1)
+sol_20, du20, En_20 = itera(2, 0, E01, E02, E03, u0, alpha, beta, mu, r2, step2)
+sol_21, du21, En_21 = itera(2, 1, E21, E22, E23, u0, alpha, beta, mu, r2, step2)
 
-sol_1,du_1 = simpson(sol_1,du_1,1,0,r1)
-sol_20,du_20 = simpson(sol_20,du_20,2,0,r2)
-sol_21,du_21 = simpson(sol_21,du_21,2,1,r2)
+sol_1,du1 = simpson(sol_1,du1,1,0,r1)
+sol_20,du20 = simpson(sol_20,du20,2,0,r2)
+sol_21,du21 = simpson(sol_21,du21,2,1,r2)
 
 #statement(sol_1,1,0,r1,En_1)
 #statement(sol_20,2,0,r2,En_20)
 #statement(sol_21,2,1,r2,En_21)
 
-#sol_21 = sol_21*5e5
-#sol_20 = sol_20*2
-
 En_1 = En_1*-1e6
 En_20 = En_20*-1e6
 En_21 = En_21*-1e6
 
+print sol_21
+
 pr1 = sqr(sol_1)
 pr20 = sqr(sol_20)
 pr21 = sqr(sol_21)
-
-#for i in range(len(r2)):
-#    if r2[i] > 3800:
-#        cut_off = i
-#        break
-#r2 = r2[:cut_off]
-#sol_20 = sol_20[:cut_off]
-#sol_21 = sol_21[:cut_off]
-#pr20 = pr20[:cut_off]
-#pr21 = pr21[:cut_off]
 
 f1 = plt.figure(1,figsize=(8,6))
 plt.plot(r1, sol_1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.1f eV" % En_1)

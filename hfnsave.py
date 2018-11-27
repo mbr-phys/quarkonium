@@ -25,9 +25,9 @@ def turningpoints(r, u, n, l):
     if n == 1:
         tolerance = 1e-14
     elif n == 2 and l == 0:
-        tolerance = 1e-11
+        tolerance = 1e-12
     else:
-        tolerance = 5e-18
+        tolerance = 1e-18
     for i in range(len(u)-2): #maybe look at specifying this more?
         if u[i] - u[i+1] < -1*tolerance and u[i+2] - u[i+1] < -1*tolerance:
             maxs += 1
