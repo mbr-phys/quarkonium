@@ -19,8 +19,11 @@
     - [x] Calculate energy of (2,1) state and plot |u(nl)|^2
         - ![Plot](/images/probs.png "Energies on plot as well")
 
-- [ ] Presentation
+- [x] Presentation
     - beamer slide show made with notes to read
+
+- [ ] Notate my code so I actually know what's going on
+    - [ ] possibly change up turning point counter, bit innaccurate right now
 
 - [ ] Program Extension
     - [ ] Apply program to Charmonium - need to iterate over beta now instead of E

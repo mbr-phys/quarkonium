@@ -3,13 +3,13 @@ import numpy as np
 import math
 from scipy.integrate import odeint, simps
 import matplotlib.pyplot as plt
-from hfns import wavefn, turningpoints, nodes, itera, normaliser, statement, sqr, simpson
+from hfns import wavefn, turningpoints, nodes, itera, normaliser, sqr, simpson
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 
 #n = float(input("n = "))
 #l = float(input("l = "))
-r1 = np.linspace(0.001, 2900, 1000)
+r1 = np.linspace(0.001, 3200, 1000)
 r2 = np.linspace(0.001, 4500, 1000)
 
 step1 = r1[1] - r1[0] #step size for normalisation
@@ -50,9 +50,9 @@ sol_1,du_1 = simpson(sol_1,du_1,1,0,r1)
 sol_20,du_20 = simpson(sol_20,du_20,2,0,r2)
 sol_21,du_21 = simpson(sol_21,du_21,2,1,r2)
 
-statement(sol_1,1,0,r1,En_1)
-statement(sol_20,2,0,r2,En_20)
-statement(sol_21,2,1,r2,En_21)
+#statement(sol_1,1,0,r1,En_1)
+#statement(sol_20,2,0,r2,En_20)
+#statement(sol_21,2,1,r2,En_21)
 
 #sol_21 = sol_21*5e5
 #sol_20 = sol_20*2
@@ -65,15 +65,15 @@ pr1 = sqr(sol_1)
 pr20 = sqr(sol_20)
 pr21 = sqr(sol_21)
 
-for i in range(len(r2)):
-    if r2[i] > 3200:
-        cut_off = i
-        break
-r2 = r2[:cut_off]
-sol_20 = sol_20[:cut_off]
-sol_21 = sol_21[:cut_off]
-pr20 = pr20[:cut_off]
-pr21 = pr21[:cut_off]
+#for i in range(len(r2)):
+#    if r2[i] > 3800:
+#        cut_off = i
+#        break
+#r2 = r2[:cut_off]
+#sol_20 = sol_20[:cut_off]
+#sol_21 = sol_21[:cut_off]
+#pr20 = pr20[:cut_off]
+#pr21 = pr21[:cut_off]
 
 f1 = plt.figure(1,figsize=(8,6))
 plt.plot(r1, sol_1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.1f eV" % En_1)
