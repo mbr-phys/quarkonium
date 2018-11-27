@@ -3,7 +3,7 @@ import numpy as np
 import math
 from scipy.integrate import odeint, simps
 import matplotlib.pyplot as plt
-from hfnsave import wavefn, turningpoints, nodes, itera, normaliser, sqr, simpson
+from hfns import wavefn, turningpoints, nodes, itera, normaliser, sqr, simpson
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 

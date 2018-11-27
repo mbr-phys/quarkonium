@@ -14,189 +14,135 @@ def wavefn(u0, r, a, b, c, d):
     dv = [v, (a/r**2)*u - b*u - (c/r)*u + d*r*u]
     return dv
 
-#def turningpoints(r, u, n, l):
-#    '''
-#        Evaluates any maxima and minima a function may have, printing how many of each and returning coords of them
-#    '''
-#    mins = 0
-#    min_loc = []
-#    maxs = 0
-#    max_loc = []
-#    if n == 1:
-#        tolerance = 1e-14
-#    elif n == 2 and l == 0:
-#        tolerance = 1e-11
-#    else:
-#        tolerance = 5e-18
-#    for i in range(len(u)-2): #maybe look at specifying this more?
-#        if u[i] - u[i+1] < -1*tolerance and u[i+2] - u[i+1] < -1*tolerance:
-#            maxs += 1
-#            maxi = i+1
-#            max_loc = np.append(max_loc,maxi)
-#        elif u[i] - u[i+1] > tolerance and u[i+2] - u[i+1] > tolerance:
-#            mins += 1
-#            mini = i+1
-#            min_loc = np.append(min_loc,mini)
-#
-#    maxes = np.zeros((len(max_loc),2))
-#    for x in range(len(max_loc)):
-#        hunt = int(max_loc[x])
-#        maxes[x,0] = r[hunt]
-#        maxes[x,1] = u[hunt]
-#
-#    minies = np.zeros((len(min_loc),2))
-#    for y in range(len(min_loc)):
-#        hunt = int(min_loc[y])
-#        minies[y,0] = r[hunt]
-#        minies[y,1] = u[hunt]
-#
-#    print "    The number of maxima is %.f" % maxs
-#    print "    The number of minima is %.f" % mins
-#
-#    return maxes, minies, max_loc, min_loc
-#
-#def nodes(maxima, minima, maxs, mins, u, r):
-#    '''
-#        Function to calculate the number of nodes of a function,
-#        and find their coordinates
-#    '''
-#    nod = np.zeros(2)
-#    if len(maxs) > 0 and len(mins) > 0:
-#        no_nodes = len(maxs)+len(mins)-1
-#        print "    The number of nodes is %.f" % no_nodes
-#        nodes_counter = 0
-#        nod = np.zeros((no_nodes,2))
-#        if maxima[0,0] < minima[0,0]:
-#            q = 0
-#            while nod[-1,0] == 0:
-#                if nodes_counter%2 == 0:
-#                    qis = int(q - nodes_counter/2)
-#                    top = mins[qis]
-#                    btm = maxs[qis]
-#                    rng = int(top-btm)
-#                    dr = np.zeros(rng)
-#                    for p in range(rng):
-#                        o = int(btm + p)
-#                        dr[p] = abs(u[o])
-#                    nod[q,1] = min(dr)
-#                    for pi in range(rng):
-#                        if dr[pi] == nod[q,1]:
-#                            oi = int(btm + pi)
-#                            nod[q,0] = r[oi]
-#                            nod[q,1] = u[oi]
-#                    nodes_counter += 1
-#                    q+= 1
-#                else:
-#                    qis = int(q - (nodes_counter-1)/2)
-#                    top = maxs[qis]
-#                    btm = mins[qis-1]
-#                    rng = int(top-btm)
-#                    dr = np.zeros(rng)
-#                    for p in range(rng):
-#                        o = int(btm + p)
-#                        dr[p] = abs(u[o])
-#                    nod[q,1] = min(dr)
-#                    for pi in range(rng):
-#                        if dr[pi] == nod[q,1]:
-#                            oi = int(btm + pi)
-#                            nod[q,0] = r[oi]
-#                            nod[q,1] = u[oi]
-#                    nodes_counter += 1
-#                    q += 1
-#            return nod, no_nodes
-#        else:
-#            q = 0
-#            while nod[-1,0] == 0:
-#                if nodes_counter%2 == 0:
-#                    top = maxs[q]
-#                    btm = mins[q]
-#                    rng = int(top-btm)
-#                    dr = np.zeros(rng)
-#                    for p in range(rng):
-#                        o = int(btm + p)
-#                        dr[p] = abs(u[o])
-#                    nod[q,1] = min(dr)
-#                    for pi in range(rng):
-#                        if dr[pi] == nod[q,1]:
-#                            oi = int(btm + pi)
-#                            nod[q,0] = r[oi]
-#                            nod[q,1] = u[oi]
-#                    nodes_counter += 1
-#                    q += 1
-#                else:
-#                    top = mins[q]
-#                    btm = maxs[q]
-#                    rng = int(top-btm)
-#                    dr = np.zeros(rng)
-#                    for p in range(rng):
-#                        o = int(btm + p)
-#                        dr[p] = abs(u[o])
-#                    nod[q,1] = min(dr)
-#                    for pi in range(rng):
-#                        if dr[pi] == nod[q,1]:
-#                            oi = int(btm + pi)
-#                            nod[q,0] = r[oi]
-#                            nod[q,1] = u[oi]
-#                    nodes_counter += 1
-#                return nod, no_nodes
-#    else:
-#        print "    There are no nodes for this function."
-#        no_nodes = 0
-#        return nod, no_nodes
-
-def turningpoints(r,u,du,n,l):
+def turningpoints(r, u, n, l):
     '''
-        bla bla bla
+        Evaluates any maxima and minima a function may have, printing how many of each and returning coords of them
     '''
-    tpts = 0 
-    tpt_loc = []
-    for i in range(len(u)-1):
-        if abs(du[i-1]) > abs(du[i]) and abs(du[i]) < abs(du[i+1]):
-            tpts += 1
-            tpti = i
-            tpt_loc = np.append(tpt_loc,tpti)
-        
-    points = np.zeros((len(tpt_loc),2))
-    for x in range(len(tpt_loc)):
-        hunt = int(tpt_loc[x])
-        points[x,0] = r[hunt]
-        points[x,1] = u[hunt]
+    mins = 0
+    min_loc = []
+    maxs = 0
+    max_loc = []
+    if n == 1:
+        tolerance = 1e-14
+    elif n == 2 and l == 0:
+        tolerance = 1e-12
+    else:
+        tolerance = 1e-18
+    for i in range(len(u)-2): #maybe look at specifying this more?
+        if u[i] - u[i+1] < -1*tolerance and u[i+2] - u[i+1] < -1*tolerance:
+            maxs += 1
+            maxi = i+1
+            max_loc = np.append(max_loc,maxi)
+        elif u[i] - u[i+1] > tolerance and u[i+2] - u[i+1] > tolerance:
+            mins += 1
+            mini = i+1
+            min_loc = np.append(min_loc,mini)
 
-    print "    The number of turning points is %.f" % tpts
+    maxes = np.zeros((len(max_loc),2))
+    for x in range(len(max_loc)):
+        hunt = int(max_loc[x])
+        maxes[x,0] = r[hunt]
+        maxes[x,1] = u[hunt]
 
-    return points, tpt_loc
+    minies = np.zeros((len(min_loc),2))
+    for y in range(len(min_loc)):
+        hunt = int(min_loc[y])
+        minies[y,0] = r[hunt]
+        minies[y,1] = u[hunt]
 
-def nodes(points, tpt_loc, u, r):
+    print "    The number of maxima is %.f" % maxs
+    print "    The number of minima is %.f" % mins
+
+    return maxes, minies, max_loc, min_loc
+
+def nodes(maxima, minima, maxs, mins, u, r):
     '''
-        I should probably start actually writing these properly
+        Function to calculate the number of nodes of a function,
+        and find their coordinates
     '''
     nod = np.zeros(2)
-    if len(tpt_loc) > 1:
-        no_nodes = len(tpt_loc)-1
+    if len(maxs) > 0 and len(mins) > 0:
+        no_nodes = len(maxs)+len(mins)-1
         print "    The number of nodes is %.f" % no_nodes
+        nodes_counter = 0
         nod = np.zeros((no_nodes,2))
-        q = 0
-        while nod[-1,0] == 0:
-            start = tpt_loc[q]
-            end = tpt_loc[q+1]
-            rng = int(end-start)
-            dr = np.zeros(rng)
-            for p in range(rng):
-                o = int(start + p)
-                dr[p] = abs(u[o])
-            nod[q,1] = min(dr)
-            for pi in range(rng):
-                if dr[pi] == nod[q,1]:
-                    oi = int(start + pi)
-                    nod[q,0] = r[oi]
-                    nod[q,1] = u[oi]
-            q += 1
-        return nod, no_nodes
+        if maxima[0,0] < minima[0,0]:
+            q = 0
+            while nod[-1,0] == 0:
+                if nodes_counter%2 == 0:
+                    qis = int(q - nodes_counter/2)
+                    top = mins[qis]
+                    btm = maxs[qis]
+                    rng = int(top-btm)
+                    dr = np.zeros(rng)
+                    for p in range(rng):
+                        o = int(btm + p)
+                        dr[p] = abs(u[o])
+                    nod[q,1] = min(dr)
+                    for pi in range(rng):
+                        if dr[pi] == nod[q,1]:
+                            oi = int(btm + pi)
+                            nod[q,0] = r[oi]
+                            nod[q,1] = u[oi]
+                    nodes_counter += 1
+                    q+= 1
+                else:
+                    qis = int(q - (nodes_counter-1)/2)
+                    top = maxs[qis]
+                    btm = mins[qis-1]
+                    rng = int(top-btm)
+                    dr = np.zeros(rng)
+                    for p in range(rng):
+                        o = int(btm + p)
+                        dr[p] = abs(u[o])
+                    nod[q,1] = min(dr)
+                    for pi in range(rng):
+                        if dr[pi] == nod[q,1]:
+                            oi = int(btm + pi)
+                            nod[q,0] = r[oi]
+                            nod[q,1] = u[oi]
+                    nodes_counter += 1
+                    q += 1
+            return nod, no_nodes
+        else:
+            q = 0
+            while nod[-1,0] == 0:
+                if nodes_counter%2 == 0:
+                    top = maxs[q]
+                    btm = mins[q]
+                    rng = int(top-btm)
+                    dr = np.zeros(rng)
+                    for p in range(rng):
+                        o = int(btm + p)
+                        dr[p] = abs(u[o])
+                    nod[q,1] = min(dr)
+                    for pi in range(rng):
+                        if dr[pi] == nod[q,1]:
+                            oi = int(btm + pi)
+                            nod[q,0] = r[oi]
+                            nod[q,1] = u[oi]
+                    nodes_counter += 1
+                    q += 1
+                else:
+                    top = mins[q]
+                    btm = maxs[q]
+                    rng = int(top-btm)
+                    dr = np.zeros(rng)
+                    for p in range(rng):
+                        o = int(btm + p)
+                        dr[p] = abs(u[o])
+                    nod[q,1] = min(dr)
+                    for pi in range(rng):
+                        if dr[pi] == nod[q,1]:
+                            oi = int(btm + pi)
+                            nod[q,0] = r[oi]
+                            nod[q,1] = u[oi]
+                    nodes_counter += 1
+                return nod, no_nodes
     else:
-        print "    There are no nodes for this function"
+        print "    There are no nodes for this function."
         no_nodes = 0
         return nod, no_nodes
-        
 
 def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
     '''
@@ -236,17 +182,17 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
         soli2, du2 = normaliser(soli2, du2, step,n,l,r)
         soli3, du3 = normaliser(soli3, du3, step,n,l,r)
 
-        pts1, loc1 = turningpoints(r, soli1,du1,n,l)
-        pts2, loc2 = turningpoints(r, soli2,du2,n,l)
-        pts3, loc3 = turningpoints(r, soli3,du3,n,l)
+        maxi1, mini1, maxs1, mins1 = turningpoints(r, soli1,n,l)
+        maxi2, mini2, maxs2, mins2 = turningpoints(r, soli2,n,l)
+        maxi3, mini3, maxs3, mins3 = turningpoints(r, soli3,n,l)
 
-        noddy1, numbs1 = nodes(pts1, loc1, soli1, r)
-        noddy2, numbs2 = nodes(pts2, loc2, soli2, r)
-        noddy3, numbs3 = nodes(pts3, loc3, soli3, r)
+        noddy1, numbs1 = nodes(maxi1, mini1, maxs1, mins1, soli1, r)
+        noddy2, numbs2 = nodes(maxi2, mini2, maxs2, mins2, soli2, r)
+        noddy3, numbs3 = nodes(maxi3, mini3, maxs3, mins3, soli3, r)
 
-        tps1 = len(pts1)
-        tps2 = len(pts2)
-        tps3 = len(pts3)
+        tps1 = len(maxi1) + len(mini1)
+        tps2 = len(maxi2) + len(mini2)
+        tps3 = len(maxi3) + len(mini3)
 
         if numbs1 != numbs2 or tps1 != tps2:
             E3 = E2
@@ -313,7 +259,7 @@ def normaliser(wvfn, dwv, step, n, l, r):
             if r[rs] > 3000:
                 break
         wvfn_new = wvfn[:rs]
-    else: 
+    else:
         wvfn_new = wvfn
 
     norm = 0
@@ -337,37 +283,35 @@ def simpson(wvfn,dwv,n,l,r):
 
     return wvfn, dwv
 
+def statement(wvfn,n,l,r,E):
+    '''
+        Statement of maxima, minima, nodes, and energy of functions
+    '''
+    print "For (n,l) = (%.f,%.f):" % (n,l)
+    maxima, minima, maxs, mins = turningpoints(r,wvfn,n,l)
+    for z in range(len(maxima[:,0])):
+        print "    Maxima No. %.f is found at r = %.2f, u = %.5e" % (z+1,maxima[z,0],maxima[z,1])
+
+    for t in range(len(minima[:,0])):
+        print "    Minima No. %.f is found at r = %.2f, u = %.5e" % (t+1,minima[t,0],minima[t,1])
+
+    noddy, numbs = nodes(maxima, minima, maxs, mins, wvfn, r)
+    if numbs != 0:
+        numbers = len(noddy)
+        for ns in range(numbers):
+            print "    Node No. %.f is found at r = %.2f, u = %.5e" % (ns+1,noddy[ns,0], noddy[ns,1])
+
+    print "    The energy of this state is %.4e" % E
+
+    return None
+
 def sqr(wvfn):
     '''
         Returns square of wavefunction
     '''
-    
+
     prob_dens = np.zeros(wvfn.shape)
     for ni in range(len(wvfn)):
         prob_dens[ni] = abs(wvfn[ni])**2
 
     return prob_dens
-
-#def statement(wvfn,n,l,r,E):
-#    '''
-#        Statement of maxima, minima, nodes, and energy of functions
-#    '''
-#    print "For (n,l) = (%.f,%.f):" % (n,l)
-#    maxima, minima, maxs, mins = turningpoints(r,wvfn,n,l)
-#    for z in range(len(maxima[:,0])):
-#        print "    Maxima No. %.f is found at r = %.2f, u = %.5e" % (z+1,maxima[z,0],maxima[z,1])
-#
-#    for t in range(len(minima[:,0])):
-#        print "    Minima No. %.f is found at r = %.2f, u = %.5e" % (t+1,minima[t,0],minima[t,1])
-#
-#    noddy, numbs = nodes(maxima, minima, maxs, mins, wvfn, r)
-#    if numbs != 0:
-#        numbers = len(noddy)
-#        for ns in range(numbers):
-#            print "    Node No. %.f is found at r = %.2f, u = %.5e" % (ns+1,noddy[ns,0], noddy[ns,1])
-#
-#    print "    The energy of this state is %.4e" % E
-#
-#    return None
-
-
