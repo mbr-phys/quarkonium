@@ -7,7 +7,7 @@ from hfns import wavefn, turningpoints, nodes, itera, normaliser, sqr, simpson
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 
-r1 = np.linspace(0.001, 3200, 1000)
+r1 = np.linspace(0.001, 5200, 1000)
 r2 = np.linspace(0.001, 5200, 1000)
 
 step1 = r1[1] - r1[0] #step size for normalisation
@@ -43,8 +43,6 @@ sol_21,du21 = simpson(sol_21,du21,2,1,r2)
 En_1 = En_1*-1e6
 En_20 = En_20*-1e6
 En_21 = En_21*-1e6
-
-print sol_21
 
 pr1 = sqr(sol_1)
 pr20 = sqr(sol_20)

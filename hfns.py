@@ -23,7 +23,7 @@ def turningpoints(r, u, n, l):
     maxs = 0
     max_loc = []
     if n == 1:
-        tolerance = 1e-14
+        tolerance = 1e-19
     elif n == 2 and l == 0:
         tolerance = 1e-12
     else:
