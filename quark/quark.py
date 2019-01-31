@@ -58,9 +58,9 @@ statement(u11,1,1,r2,E11,norm)
 statement(u20,2,0,r3,E20,norm)
 
 f1 = plt.figure(1,figsize=(8,6))
-plt.plot(r1, u1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.3f eV" % E1)
-plt.plot(r2, u11, 'g',label="(n,l) = (1,1), $E_{nl} =$ %.3f eV" % E11)
-plt.plot(r3, u20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.3f eV" % E20)
+plt.plot(r1, u1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.3f GeV" % E1)
+plt.plot(r2, u11, 'g',label="(n,l) = (1,1), $E_{nl} =$ %.3f GeV" % E11)
+plt.plot(r3, u20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.3f GeV" % E20)
 ### probs get gridspec in here for separate plots
 plt.plot((r2[0],r2[-1]),(0,0),'grey')
 
@@ -70,9 +70,9 @@ plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize='x-large')
 plt.ylabel("$u_{nl}(r)$",fontsize='x-large')
 
 f2 = plt.figure(2,figsize=(8,6))
-plt.plot(r1, pr1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.3f eV" % E1)
-plt.plot(r2, pr11, 'g',label="(n,l) = (1,1), $E_{nl} =$ %.3f eV" % E11)
-plt.plot(r3, pr20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.3f eV" % E20)
+plt.plot(r1, pr1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.3f GeV" % E1)
+plt.plot(r2, pr11, 'g',label="(n,l) = (1,1), $E_{nl} =$ %.3f GeV" % E11)
+plt.plot(r3, pr20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.3f GeV" % E20)
 ### probs get gridspec in here for separate plots
 plt.plot((r2[0],r2[-1]),(0,0),'grey')
 
