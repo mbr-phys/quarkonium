@@ -8,8 +8,8 @@
     - [x] Solve SE for specific quark mass and energy values
     - [x] Calculate number of nodes and turning points
     - [x] Guess new energy or beta and iterate for solution
-    - [ ] Find energy or beta, whichever not found before
-    - [ ] Plot resulting wavefunctions
+    - [x] Find energy or beta, whichever not found before
+    - [x] Plot resulting wavefunctions
 
 - [x] Milestone Program
     - [x] Calculate energy levels and wavefns of hydrogen
@@ -22,15 +22,18 @@
 - [x] Presentation
     - beamer slide show made with notes to read
 
-- [ ] Notate my code so I actually know what's going on
-    - [ ] possibly change up turning point counter, bit innaccurate right now
+- [x] Notate my code so I actually know what's going on
+    - [x] possibly change up turning point counter, bit innaccurate right now
 
-- [ ] Program Extension
-    - [ ] Apply program to Charmonium - need to iterate over beta now instead of E
-    - [ ] Calculate beta to 3dp, using spin average mass
-    - [ ] Predict energy for (1,1) and (2,0)
-    - [ ] Produce plots of normalised wavefns for (1,0), (1,1), (2,0) states
+- [x] Program Extension
+    - [x] Apply program to Charmonium - need to iterate over beta now instead of E
+    - [x] Calculate beta to 3dp, using spin average mass
+        - beta = 0.195
+    - ![Plot for beta](/images/beta.png)
+    - [x] ![Predict energy for (1,1) and (2,0)](/images/Charmonium.png)
+    - [x] ![Produce plots of normalised wavefns for (1,0), (1,1), (2,0) states](/images/charmpdf.ong)
 
 - [ ] Further Research
     - Figure out where I'm going next
+    - Possible extensions in project book and presentation
 

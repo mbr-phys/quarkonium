@@ -72,3 +72,5 @@ Non-relativistic means can use standard QM, i.e. Schrodinger eqn
 $$
     \left[-\frac{\hbar^2}{2m}\vec{\nabla}^2 + V(r)\right]\Psi_{nl} = E_{nl}\Psi_{nl}
 $$
+
+NB beta roughly 0.19
