@@ -30,8 +30,10 @@
     - [x] Calculate beta to 3dp, using spin average mass
         - beta = 0.195
     - ![Plot for beta](/images/beta.png)
-    - [x] ![Predict energy for (1,1) and (2,0)](/images/Charmonium.png)
-    - [x] ![Produce plots of normalised wavefns for (1,0), (1,1), (2,0) states](/images/charmpdf.ong)
+    - [x] Predict energy for (1,1) and (2,0)
+        - ![Plot](/images/Charmonium.png)
+    - [x] Produce plots of normalised wavefns for (1,0), (1,1), (2,0) states
+        - ![Plot](/images/charmpdf.png)
 
 - [ ] Further Research
     - Figure out where I'm going next
