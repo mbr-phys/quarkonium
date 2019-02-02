@@ -35,6 +35,9 @@
     - [x] Produce plots of normalised wavefns for (1,0), (1,1), (2,0) states
         - ![Plot](/images/charmpdf.png)
 
+- [ ] Poster time
+    - TeX poster using [this template](https://www.brian-amberg.de/uni/poster/) with some other people's modifications and my own
+
 - [ ] Further Research
     - Figure out where I'm going next
     - Possible extensions in project book and presentation

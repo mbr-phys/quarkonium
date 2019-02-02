@@ -55,10 +55,10 @@ plt.plot(r2, sol21, 'g',label="(n,l) = (2,1), $E_{nl} =$ %.2f eV" % En_21)
 ## probs get gridspec in here for separate plots
 plt.plot((r2[0],r2[-1]),(0,0),'grey')
 
-plt.legend(loc=1, fontsize='x-large')
-plt.title("Solutions of the Hydrogen Electron Radial Wavefunction",fontsize='x-large')
-plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize='x-large')
-plt.ylabel("$u_{nl}(r)$",fontsize='x-large')
+plt.legend(loc=1, fontsize=25)
+plt.title("Solutions of the Hydrogen Electron Radial Wavefunction",fontsize='xx-large')
+plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize='xx-large')
+plt.ylabel("$u_{nl}(r)$",fontsize='xx-large')
 
 f2 = plt.figure(2,figsize=(8,6))
 plt.plot(r1, pr1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.1f eV" % En_1)
@@ -67,9 +67,9 @@ plt.plot(r2, pr21, 'g',label="(n,l) = (2,1), $E_{nl} =$ %.2f eV" % En_21)
 ## probs get gridspec in here for separate plots
 plt.plot((r2[0],r2[-1]),(0,0),'grey')
 
-plt.legend(loc=1, fontsize='x-large')
-plt.title("Probability Densities of the Hydrogen Electron Radial Wavefunction",fontsize='x-large')
-plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize='x-large')
-plt.ylabel("$|u_{nl}(r)|^2$",fontsize='x-large')
+plt.legend(loc=1, fontsize=25)
+plt.title("Probability Densities of the Hydrogen Electron Radial Wavefunction",fontsize='xx-large')
+plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize='xx-large')
+plt.ylabel("$|u_{nl}(r)|^2$",fontsize='xx-large')
 
 plt.show()

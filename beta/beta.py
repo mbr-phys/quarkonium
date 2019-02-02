@@ -38,10 +38,10 @@ plt.plot(r1, sol1, 'b',label=r"(n,l) = (1,0), " r"$\beta =$ %.3f" % beta1)
 ## probs get gridspec in here for separate plots
 plt.plot((r1[0],r1[-1]),(0,0),'grey')
 
-plt.legend(loc=1, fontsize='x-large')
-plt.title(r"Calculation of $\beta$",fontsize='x-large')
-plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize='x-large')
-plt.ylabel("$u_{nl}(r)$",fontsize='x-large')
+plt.legend(loc=7, fontsize=40)
+plt.title(r"Calculation of $\beta$",fontsize='xx-large')
+plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize='xx-large')
+plt.ylabel("$u_{nl}(r)$",fontsize='xx-large')
 
 #f2 = plt.figure(2,figsize=(8,6))
 #plt.plot(r1, pr1, 'b',label=r"(n,l) = (1,0), " r"$\beta =$ %.3f" % beta1)

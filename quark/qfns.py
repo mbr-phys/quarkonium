@@ -306,7 +306,9 @@ def statement(wvfn,n,l,r,E,norm):
 
     print "    The energy of this state is %.4f" % E
 
-    return None
+    tsn = np.concatenate((maxima, minima), axis=0)
+
+    return tsn, noddy
 
 def sqr(wvfn):
     '''
