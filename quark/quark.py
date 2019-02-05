@@ -66,7 +66,7 @@ plt.plot(r3, u20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.3f GeV" % E20)
 ### probs get gridspec in here for separate plots
 plt.plot((r2[0],r2[-1]),(0,0),'grey')
 
-plt.legend(loc=1, fontsize=25)
+plt.legend(loc=1, fontsize=35)
 plt.title("Solutions of the Charmonium Wavefunction",fontsize='xx-large')
 plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize='xx-large')
 plt.ylabel("$u_{nl}(r)$",fontsize='xx-large')

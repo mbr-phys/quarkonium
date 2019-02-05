@@ -1,14 +1,13 @@
 \begin{thebibliography}{1}
 
+\bibitem{qnl}
+J.~F.~Donoghue and B.R~Holsten, E.~Golowich.
+\newblock {\em Dynamics Of The Standard Model}.
+\newblock Cambridge University Press, 2014.
+
 \bibitem{website:pdg}
 C.~Amsler et~al [Particle Data~Group].
-\newblock Review of particle physics.
+\newblock Review of particle physics 2008.
 \newblock http://pdg.lbl.gov/, February 2019.
-
-\bibitem{qnl}
-Alan D.~Martin Francis~Halzen.
-\newblock {\em Quarks and Leptons: An Introductory Course In Moden Particle
-  Physics}.
-\newblock John Wiley and Sons, 1984.
 
 \end{thebibliography}

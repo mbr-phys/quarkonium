@@ -55,7 +55,7 @@ plt.plot(r2, sol21, 'g',label="(n,l) = (2,1), $E_{nl} =$ %.2f eV" % En_21)
 ## probs get gridspec in here for separate plots
 plt.plot((r2[0],r2[-1]),(0,0),'grey')
 
-plt.legend(loc=1, fontsize=25)
+plt.legend(loc=1, fontsize=35)
 plt.title("Solutions of the Hydrogen Electron Radial Wavefunction",fontsize='xx-large')
 plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize='xx-large')
 plt.ylabel("$u_{nl}(r)$",fontsize='xx-large')

@@ -34,11 +34,11 @@ statement(sol1,n,l,r1,beta1,norm)
 print E
 
 f1 = plt.figure(1,figsize=(8,6))
-plt.plot(r1, sol1, 'b',label=r"(n,l) = (1,0), " r"$\beta =$ %.3f" % beta1)
+plt.plot(r1, sol1, 'b',label=r"$E_{10} = 0.388, \beta =$ %.3f" % beta1)
 ## probs get gridspec in here for separate plots
 plt.plot((r1[0],r1[-1]),(0,0),'grey')
 
-plt.legend(loc=7, fontsize=40)
+plt.legend(loc=10, fontsize=42, handlelength=0, handletextpad=0)
 plt.title(r"Calculation of $\beta$",fontsize='xx-large')
 plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize='xx-large')
 plt.ylabel("$u_{nl}(r)$",fontsize='xx-large')
