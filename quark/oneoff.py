@@ -19,7 +19,7 @@ alpha = 0.4*4/3
 
 beta1 = 0.195
 
-#E1 = 1.03670047557
+# E1 = 1.03670047557
 E1 = 1.0
 E2 = 1.5
 E3 = 2.0
@@ -59,6 +59,9 @@ tsn2, nod2 = statement(u11,n,l,r3,E2,1)
 tsn3, nod3 = statement(u20,n,l,r3,E3,1)
 
 f1 = plt.figure(1,figsize=(8,6))
+ax = f1.add_subplot(111)
+ax.tick_params(axis='x', which='major', labelsize=15)
+ax.tick_params(axis='y', which='major', labelsize=15)
 plt.plot(r3, u1, 'b',label="$E_{nl} =$ %.3f GeV" % E1)
 plt.plot(r3, u11, 'g',label="$E_{nl} =$ %.3f GeV" % E2)
 plt.plot(r3, u20, 'r',label="$E_{nl} =$ %.3f GeV" % E3)
@@ -72,9 +75,10 @@ plt.plot(nod3[:,0], nod3[:,1], 'xr')
 plt.plot((r3[0],r3[-1]),(0,0),'grey')
 
 plt.legend(loc=8, fontsize=25)
-plt.title("Early Iteration of Bisection Method for Charmonium (2,0)",fontsize='xx-large')
-plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize='xx-large')
-plt.ylabel("$u_{nl}(r)$",fontsize='xx-large')
+plt.title("Early Iteration of Bisection Method for Charmonium (2,0)",fontsize=25)
+# plt.title("Energy Estimations of Charmonium (2,0)", fontsize=25)
+plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize=25)
+plt.ylabel("$u_{nl}(r)$",fontsize=25)
 
 #f2 = plt.figure(2,figsize=(8,6))
 #plt.plot(r3, pr1, 'b',label="$E_{20} =$ %.3f GeV" % E1)
@@ -84,8 +88,8 @@ plt.ylabel("$u_{nl}(r)$",fontsize='xx-large')
 #plt.plot((r3[0],r3[-1]),(0,0),'grey')
 #
 #plt.legend(loc=1, fontsize=25)
-#plt.title("Probability Densities of Charmonium Wavefunction",fontsize='xx-large')
-#plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize='xx-large')
-#plt.ylabel("$|u_{nl}(r)|^2$",fontsize='xx-large')
+#plt.title("Probability Densities of Charmonium Wavefunction",fontsize=25)
+#plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize=25)
+#plt.ylabel("$|u_{nl}(r)|^2$",fontsize=25)
 
 plt.show()

@@ -103,12 +103,12 @@
 \headerbox{Introduction}{name=intro,column=0,row=0,span=2,boxColorOne=white}{
     Quarks are fundamental particles of the Standard Model of particle physics, most well-known for being the constituent particles of the proton and neutron. 
     They \textbf{cannot exist as free particles,} and so must be studied as part of bound systems.
-    They can form quark-antiquark states called quarkonium - these can be studied similarly to the Hydrogen atom. 
-    The charm-anticharm state is known as Charmonium, and this will be the focus of this study.  
+    They can form quark-antiquark systems called quarkonium - these can be studied similarly to the Hydrogen atom, but using strong force interactions.
+    The charm-anticharm system is known as Charmonium, and this will be the focus of this study.  
 }
 
 \headerbox{Theory}{name=theory,below=intro,column=0, span=1,boxColorOne=white}{
-    The Charmonium wavefunction comes through solving the 3D Schrodinger equation \cite{qnl},
+    The Charmonium wavefunction is found by solving the 3D Schrodinger equation \cite{qnl},
     \vspace{-10pt}
     \begin{align}
         -\frac{\hbar^2}{2\mu}\nabla^2\psi &+ [V(r) - E_{nl}]\psi = 0, \\
@@ -131,9 +131,9 @@
 }
 
 \headerbox{The Bisection Method}{name=bis,below=theory,above=bottom,column=0,span=1,boxColorOne=white}{
-    This method guess three energies, $E_1, E_3$, and $E_2 = \frac{E_1+E_3}{2}$ to find $u_{nl}$.
+    This method guesses three energies, $E_1, E_3$, and $E_2 = \frac{E_1+E_3}{2}$ to find $u_{nl}$.
     Using \texttt{scipy.integrate.odeint}, (3) and (4) are solved for these energies and normalised using Simpson's method. 
-    Count the nodes and turning points for each function - if these differ between two solutions, $E_{nl}$ lies somewhere between those energies. 
+    The nodes and turning points are counted for each function - if these differ between two solutions, $E_{nl}$ lies somewhere between those energies. 
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.85\linewidth]{nodes}
@@ -153,7 +153,7 @@
 
 
 \headerbox{The Hydrogen Wavefunction}{name=hydro,column=1,below=intro,span=1,boxColorOne=white}{
-    To check the program is functioning for a simpler model, we apply it to the Hydrogen electron.
+    To check the program is functioning for a simpler model, we apply it to the Hydrogen atom.
     The solution is found in the same way, with some constant changes:
     \begin{equation}
         \frac{4\alpha_s}{3} \to \alpha = \frac{1}{137},~ \beta \to 0,~ \mu \to m_e.
@@ -175,7 +175,7 @@
     The ground state energy is known through relation to the bound mass and charm quark mass:
    \vspace{-5pt}
     \begin{equation}
-        M_{nl} = E_{nl} + 2m_c,~ M_{nl} = 3.068\text{Gev}/c^2,~ m_c = 1.34\text{GeV}/c^2
+        M_{nl} = E_{nl} + 2m_c\,\cite{qnl},\, M_{nl} = 3.068\text{Gev}/c^2,~ m_c = 1.34\text{GeV}/c^2 
     \end{equation}
     The bisection method is performed over $\beta$ with ground state energy a constant, and $\beta$'s value is found.
     \begin{figure}[H]
@@ -185,14 +185,14 @@
 }
 
 \headerbox{Finding the Charmonium Wavefunctions}{name=comp,above=references,column=2,span=1,boxColorOne=white}{
-    With a known value of $\beta = 0.195$, we can proceed to solve the Charmonium wavefunction, with
+    With a known value of $\beta = 0.195$, we can proceed to solve the Charmonium wavefunction, with the strong coupling constant,
     \begin{equation}
         \alpha_s = 0.4.
     \end{equation}
     We can check that this value of $\beta$ yields the correct energy for the ground state of Charmonium, and then apply it to the (1,1) and (2,0) states as well to find their energies. 
-    Now using the same method as before, having confirmed the functionality of the program on hydrgoen, the solutions of the radial wavefunction are solved.
+    Now using the same method as before, having confirmed the functionality of the program on hydrogen, the solutions of the radial wavefunction are solved.
 
-    Without examining the results of computations, it can be seen that the nodes and turning points cannot depend on the value of $l$ as seen in Hydrogen, if the (1,1) state is to have a non-zero wavefunction. 
+    Without examining the results of computations, it can be seen that the nodes and turning points cannot depend on the value of $l$, as seen in Hydrogen, if the (1,1) state is to have a non-zero wavefunction. 
     So we go back to the original $(n-1)$ nodes and $n$ turning points method original stated for the bisection method.
     \begin{figure}[H]
         \centering
@@ -204,25 +204,25 @@
     \end{align}
     From these results, it is obvious that, unlike the hydrogen atom, the energy of the system depends on both the $n$ and $l$ quantum numbers, instead of just the $n$.\\
     These energies can then be checked against theory by converting to bound masses through (8) and compared to values for each state given in \cite{website:pdg}. \\
-    The ground state bound mass and charm masses were given values to be used at the beginning of this project, meaning that these differ from the values in \cite{website:pdg}. 
-    The (1,1) and (2,0) states calculated have energies broadly accurate with the states given in \cite{website:pdg} - the difference comes from hyperfine splitting which has not yet been considered, but the average energy of the states roughly agrees with expectations.
+    The ground state bound mass and charm mass were given values to be used at the beginning of this project, differing from results in \cite{website:pdg} due to spin-averaging.
+    The (1,1) and (2,0) states calculated have energies broadly accurate with the spin-average of states given in \cite{website:pdg} - the difference comes from hyperfine splitting which has not yet been considered, but the average energy of the states roughly agrees with expectations.
 }
 
 \headerbox{Outlook}{name=outlook,column=3,span=1,boxColorOne=white}{
-    Now with a functioning program, further extensions to be applied to the study are considered. 
-    The energies of the states were seen to be somewhat innacurate to the known measurements, at least partially due to the hyperfine spin-spin interaction causing a splitting in the energy.
+    Now with a functioning program, further extensions to the study can be considered. 
+    The energies of the states were seen to be somewhat innacurate to the known measurements, at least partially due to the hyperfine spin interactions which causes a splitting in the energy \cite{qnl}.
     This splitting is
     \vspace{-10pt}
     \begin{equation}
         \Delta(n^3S_1 - n_1S_0) = \frac{8\alpha_s}{9m_q^2}|R_{nl}(0)|^2,
     \end{equation}
-    so the energies calculated in this project will be the average of the two hyperfine energies, and these values can be found using this splitting formula.
+    so the energies calculated in this project will be the spin-average of the hyperfine energies, to be tested in further studies.
     The splitting depends on the value of the wavefunction at $r=0$, which is
     \vspace{-10pt}
     \begin{equation}
         \lim_{r\to0} R_{nl}(r) = \lim_{r\to0} \frac{u_{nl}(r)}{r} = \frac{du_{nl}(0)}{dr}.
     \end{equation}
-    Further from this, the transition rates between the higher and lower hyperfine energies can be stuided.
+    Transition rates between these states can be studied to give further insight into the strong force.
 }
 
 \headerbox{Faults of the Method}{name=faults,column=3, above=references, below=outlook, boxColorOne=white}{
@@ -240,6 +240,7 @@
     The program can only be as accurate as the initial values put in. 
     If the values of mass, and $\alpha_s$, they will result in different end results for energy. 
     Thus, comparison to known values can only be valid if these parameters are approximately similar.
+    The values were also spin-averaged, so considering hyperfine splitting will change results.
 }
 \end{poster}%
 %
