@@ -22,17 +22,13 @@ def turningpoints(r, u, n, l):
     min_loc = []
     maxs = 0
     max_loc = []
-    if n == 1 and l == 0:
-        tolerance = 5e-17
-    elif n == 1 and l == 1:
-        tolerance = 5e-11
+    if n == 1: 
+        tolerance = 1e-19
     elif n == 2 and l == 0:
-        tolerance = 1e-11
-    elif n == 2 and l == 1:
-        tolerance = 1e-10
-    elif n == 3 and l == 0:
-        tolerance = 5e-05
-    for i in range(len(u)-20): #maybe look at specifying this more?
+        tolerance = 1e-18 
+    else:
+        tolerance = 1e-18
+    for i in range(len(u)-2): #maybe look at specifying this more?
         if u[i] - u[i+1] < -1*tolerance and u[i+2] - u[i+1] < -1*tolerance:
             maxs += 1
             maxi = i+1
@@ -159,16 +155,16 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
     q = 0
     i = 0
     while i==0:
-        if q > 1000:
+        if q > 2000:
             print "Iterative solution took too long to find"
             break
         if E1 == E2:
             E3 = E2
         elif E3 == E2:
             E1 = E2
-        b1 = 2*mu*E1
-        b2 = 2*mu*E2
-        b3 = 2*mu*E3
+        b1 = -2*mu*E1
+        b2 = -2*mu*E2
+        b3 = -2*mu*E3
 
         sol1 = odeint(wavefn, u0, r, args=(a,b1,c,d))
         sol2 = odeint(wavefn, u0, r, args=(a,b2,c,d))
@@ -194,30 +190,30 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
         maxi2, mini2, maxs2, mins2 = turningpoints(r, soli2,n,l)
         maxi3, mini3, maxs3, mins3 = turningpoints(r, soli3,n,l)
 
+        noddy1, numbs1 = nodes(maxi1, mini1, maxs1, mins1, soli1, r)
+        noddy2, numbs2 = nodes(maxi2, mini2, maxs2, mins2, soli2, r)
+        noddy3, numbs3 = nodes(maxi3, mini3, maxs3, mins3, soli3, r)
+
         tps1 = len(maxi1) + len(mini1)
         tps2 = len(maxi2) + len(mini2)
         tps3 = len(maxi3) + len(mini3)
 
-        n1, nr1, nu1 = counter(soli1, r,maxi1,mini1)
-        n2, nr2, nu2 = counter(soli2, r,maxi2,mini2)
-        n3, mr3, nu3 = counter(soli3, r,maxi3,mini3)
-
-        if n1 != n2 or tps1 != tps2:
+        if numbs1 != numbs2 or tps1 != tps2:
             E3 = E2
             E2 = (E1 + E3)/2
             q += 1
-        elif n2 != n3 or tps2 != tps3:
+        elif numbs2 != numbs3 or tps2 != tps3:
             E1 = E2
             E2 = (E1 + E3)/2
             q += 1
         else:
-            if n1 == (n-1) and tps1 == (n):
+            if numbs1 == (n-l-1) and tps1 == (n-l):
                 print "Found iterative solution in %.f iterations" % q
                 break
-            elif n2 == (n-1) and tps2 == (n):
+            elif numbs2 == (n-l-1) and tps2 == (n-l):
                 print "Found iterative solution in %.f iterations" % q
                 break
-            elif n3 == (n-1) and tps3 == (n):
+            elif numbs3 == (n-l-1) and tps3 == (n-l):
                 print "Found iterative solution in %.f iterations" % q
                 break
             else:
@@ -232,30 +228,48 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
                 else:
                     odmag = int(input("Energies converged to 0, give new order of magnitude: "))
                     E1 = 5*10**odmag
-                cond = 1e-18
-                if delta < cond:
+                if delta < 1e-18:
                     print "Energies converged"
-                    if (n == 2 and l == 1) or (n == 3 and l == 0):
-                        E3 = 2.0
-                        E2 = 1.65
-                        E1 = 1.3
-                    elif n == 2 and l == 0:
-                        E3 = 1.5
-                        E2 = 1.25
-                        E1 = 1.0
-                    else:
-                        E3 = 1.0
-                        boom = E3/3
-                        E2 = E3 - boom
-                        E1 = E2 - boom
+                    if n == 2:
+                        E1 = 5e-6
+                        boom = E1/3
+                    elif n == 3:
+                        E1 = 3e-6
+                        boom = E1/3
+                    E3 = E1 
+                    E2 = E3 - boom
+                    E1 = E2 - boom
                 else:
                     boom = 0.25*10**odmag
                     E3 = E1
                     E2 = E3 - boom
                     E1 = E2 - boom
+                if E1 < 0:
+                    E1 = -1*E1
+                if E2 < 0:
+                    E2 = -1*E2
+                if E3 < 0:
+                    E3 = -1*E3
                 q += 1
 
     return pri2, soli2, du2, E2
+
+def normaliser(wvfn, dwv, step, n, l, r):
+    '''
+        Gonna normalise those wavefns
+    '''
+    wvfn_new = wvfn
+
+    norm = 0
+    for n in range(len(wvfn_new)):
+        norm = norm + abs(wvfn_new[n])**2
+
+    prob = norm*step
+
+    wvfn = wvfn/prob
+    dwv = dwv/prob
+
+    return wvfn, dwv
 
 def simpson(pr,wvfn,dwv,n,l,r):
     '''
@@ -282,17 +296,18 @@ def statement(wvfn,n,l,r,E,norm):
     for t in range(len(minima[:,0])):
         print "    Minima No. %.f is found at r = %.2f, u = %.5e" % (t+1,minima[t,0],minima[t,1])
 
-    n, nr, nu = counter(wvfn, r,maxima,minima)
-    if n != 0:
-        for ns in range(n):
-            print "    Node No. %.f is found at r = %.2f, u = %.5e" % (ns+1,nr[ns], nu[ns])
+    noddy, numbs = nodes(maxima, minima, maxs, mins, wvfn, r)
+    if numbs != 0:
+        noddy[:,1] = noddy[:,1]/norm
+        numbers = len(noddy)
+        for ns in range(numbers):
+            print "    Node No. %.f is found at r = %.2f, u = %.5e" % (ns+1,noddy[ns,0], noddy[ns,1])
 
-    m = E + 2.68
-    print "    The mass of this state is %.4f" % m
+    print "    The energy of this state is %.4f" % E
 
     tsn = np.concatenate((maxima, minima), axis=0)
 
-    return tsn, n
+    return tsn, noddy
 
 def sqr(wvfn):
     '''
@@ -321,35 +336,3 @@ def S_hyperfine(alpha, m, r0, E):
     E1 = E + e0
 
     return E3, E1
-
-def counter(u,r,mx,mn):
-    '''
-        Alternate node counter
-    '''
-    if mn.shape == (0,2) and mx.shape == (0,2):
-        tr = r[-1]
-    elif mn.shape == (0,2) and mx.shape != (0,2):
-        tr = mx[-1,0]
-    elif mx.shape == (0,2) and mn.shape != (0,2):
-        tr = mn[-1,0]
-    elif mx[-1,0] > mn[-1,0]:
-        tr = mx[-1,0]
-    else:
-        tr = mn[-1,0]
-
-    nodes = 0 
-    nr = []
-    nu = [] 
-    for i in range(len(r)-6):
-#        if r[i] > tr:
-#            break
-        if u[i+5]/u[i+6] < 0:
-            nodes += 1
-            rn = (r[i+5]+r[i+6])/2
-            nr = np.append(nr,rn)
-            un = (u[i+5]+u[i+6])/2
-            nu = np.append(nu,un)
-
-    print "  The number of nodes is %.f" % nodes
-
-    return nodes, nr, nu

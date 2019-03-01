@@ -35,10 +35,12 @@
     - [x] Produce plots of normalised wavefns for (1,0), (1,1), (2,0) states
         - ![Plot](/images/charmpdf.png)
 
-- [ ] Poster time
+- [x] Poster time
     - TeX poster using [this template](https://www.brian-amberg.de/uni/poster/) with some other people's modifications and my own
 
 - [ ] Further Research
-    - Figure out where I'm going next
-    - Possible extensions in project book and presentation
+    - Extend spectrum to include (2,1) and (3,0)  
+    - ![Plot](/images/fullspec.png)
+    - Calculate spectrum using power law potential and `scipy.optimise` for better fitting
+    - Compare hyperfine splitting
 

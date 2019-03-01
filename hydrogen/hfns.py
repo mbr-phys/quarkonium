@@ -55,6 +55,38 @@ def turningpoints(r, u, n, l):
 
     return maxes, minies, max_loc, min_loc
 
+def counter(u,r,mx,mn):
+    '''
+    Alternate notes counter
+    '''
+    if mn.shape == (0,2) and mx.shape == (0,2):
+        tr = r[-1]
+    elif mn.shape == (0,2) and mx.shape != (0,2):
+        tr = mx[-1,0]
+    elif mx.shape == (0,2) and mn.shape != (0,2):
+        tr = mn[-1,0]
+    elif mx[-1,0] > mn[-1,0]:
+        tr = mx[-1,0]
+    else:
+        tr = mn[-1,0]
+
+    nodes = 0 
+    nr = []
+    nu = [] 
+    for i in range(len(r)-6):
+        if r[i] > tr:
+            break
+        if u[i+5]/u[i+6] < 0:
+            nodes += 1
+            rn = (r[i+5]+r[i+6])/2
+            nr = np.append(nr,rn)
+            un = (u[i+5]+u[i+6])/2
+            nu = np.append(nu,un)
+
+    print "  The number of nodes is %.f" % nodes
+
+    return nodes, nr, nu
+
 def nodes(maxima, minima, maxs, mins, u, r):
     '''
         Function to calculate the number of nodes of a function,
@@ -182,30 +214,30 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
         maxi2, mini2, maxs2, mins2 = turningpoints(r, soli2,n,l)
         maxi3, mini3, maxs3, mins3 = turningpoints(r, soli3,n,l)
 
-        noddy1, numbs1 = nodes(maxi1, mini1, maxs1, mins1, soli1, r)
-        noddy2, numbs2 = nodes(maxi2, mini2, maxs2, mins2, soli2, r)
-        noddy3, numbs3 = nodes(maxi3, mini3, maxs3, mins3, soli3, r)
-
         tps1 = len(maxi1) + len(mini1)
         tps2 = len(maxi2) + len(mini2)
         tps3 = len(maxi3) + len(mini3)
 
-        if numbs1 != numbs2 or tps1 != tps2:
+        n1, nr1, nu1 = counter(soli1, r, maxi1, mini1)
+        n2, nr2, nu2 = counter(soli2, r, maxi2, mini2)
+        n3, nr3, nu3 = counter(soli3, r, maxi3, mini3)
+
+        if n1 != n2 or tps1 != tps2:
             E3 = E2
             E2 = (E1 + E3)/2
             q += 1
-        elif numbs2 != numbs3 or tps2 != tps3:
+        elif n2 != n3 or tps2 != tps3:
             E1 = E2
             E2 = (E1 + E3)/2
             q += 1
         else:
-            if numbs1 == (n-l-1) and tps1 == (n-l):
+            if n1 == (n-l-1) and tps1 == (n-l):
                 print "Found iterative solution"
                 break
-            elif numbs2 == (n-l-1) and tps2 == (n-l):
+            elif n2 == (n-l-1) and tps2 == (n-l):
                 print "Found iterative solution"
                 break
-            elif numbs3 == (n-l-1) and tps3 == (n-l):
+            elif n3 == (n-l-1) and tps3 == (n-l):
                 print "Found iterative solution"
                 break
             else:
@@ -246,29 +278,6 @@ def itera(n, l, E1, E2, E3, u0, alpha, beta, mu, r, step):
 
     return soli2, du2, E2
 
-def normaliser(wvfn, dwv, step, n, l, r):
-    '''
-        Gonna normalise those wavefns
-    '''
-    if n == 2 and l == 1:
-        for rs in range(len(r)):
-            if r[rs] > 3000:
-                break
-        wvfn_new = wvfn[:rs]
-    else:
-        wvfn_new = wvfn
-
-    norm = 0
-    for n in range(len(wvfn_new)):
-        norm = norm + abs(wvfn_new[n])**2
-
-    prob = norm*step
-
-    wvfn = wvfn/prob
-    dwv = dwv/prob
-
-    return wvfn, dwv
-
 def simpson(pr,wvfn,dwv,n,l,r):
     '''
         Stuff
@@ -294,12 +303,10 @@ def statement(wvfn,n,l,r,E,norm):
     for t in range(len(minima[:,0])):
         print "    Minima No. %.f is found at r = %.2f, u = %.5e" % (t+1,minima[t,0],minima[t,1])
 
-    noddy, numbs = nodes(maxima, minima, maxs, mins, wvfn, r)
-    if numbs != 0:
-        noddy[:,1] = noddy[:,1]/norm
-        numbers = len(noddy)
-        for ns in range(numbers):
-            print "    Node No. %.f is found at r = %.2f, u = %.5e" % (ns+1,noddy[ns,0], noddy[ns,1])
+    n, nr, nu = counter(wvfn, r, maxima, minima)
+    if n != 0:
+        for ns in range(n):
+            print "    Node No. %.f is found at r = %.2f, u = %.5e" % (ns+1,nr[ns], nu[ns])
 
     print "    The energy of this state is %.4e" % E
 
