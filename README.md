@@ -42,5 +42,7 @@
     - Extend spectrum to include (2,1) and (3,0)  
     - ![Plot](/images/fullspec.png)
     - Calculate spectrum using power law potential and `scipy.optimise` for better fitting
+        - `scipy.optimize` doesn't quite work yet
+    - ![Plot](/images/fullspec2.png)
     - Compare hyperfine splitting
 

@@ -4,7 +4,7 @@ import math
 from scipy.integrate import odeint, simps
 import matplotlib.pyplot as plt
 #from qfns import wavefn, turningpoints, counter, itera, sqr, simpson, statement, S_hyperfine
-from q2 import wavefn, psi, counter, itera, sqr, simpson, statement
+from qcd import wavefn, psi, counter, itera, sqr, simpson, statement
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 
@@ -23,11 +23,10 @@ step5 = r5[1] - r5[0]
 mc = 1.34
 invmu = 1/mc + 1/mc
 mu = 1/invmu
-alpha_S = 0.4
-alpha = 0.4*4/3
 
-beta1 = 0.195
-beta2 = 0.19512
+c = 7.641
+d = 0.1
+yint = 8.064
 
 E1 = 0.3
 E2 = 0.5
@@ -45,15 +44,15 @@ Ep1 = 1.3
 Ep2 = 1.55
 Ep3 = 1.8
 
-E31 = 1.5
+E31 = 1.45
 E32 = 1.4
-E33 = 1.6
+E33 = 2.0
 
-pr1, u1, du1, E1 = itera(1, 0, E1, E3, u0, alpha, beta1, mu, r1, step1)
-pr11, u11, du11, E11 = itera(1, 1, E11, E13, u0, alpha, beta1, mu, r2, step2)
-pr20, u20, du20, E20 = itera(2, 0, E01, E03, u0, alpha, beta1, mu, r3, step3)
-pr21, u21, du21, E21 = itera(2, 1, Ep1, Ep3, u0, alpha, beta1, mu, r4, step4)
-pr30, u30, du30, E30 = itera(3, 0, E31, E33, u0, alpha, beta1, mu, r5, step5)
+pr1, u1, du1, E1 = itera(1, 0, E1, E3, u0, c, d, yint, mu, r1, step1)
+pr11, u11, du11, E11 = itera(1, 1, E11, E13, u0, c, d, yint, mu, r2, step2)
+pr20, u20, du20, E20 = itera(2, 0, E01, E03, u0, c, d, yint, mu, r3, step3)
+pr21, u21, du21, E21 = itera(2, 1, Ep1, Ep3, u0, c, d, yint, mu, r4, step4)
+pr30, u30, du30, E30 = itera(3, 0, E31, E33, u0, c, d, yint, mu, r5, step5)
 
 norm = 1
 statement(u1,du1,1,0,r1,E1,norm)

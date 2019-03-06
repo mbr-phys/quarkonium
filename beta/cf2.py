@@ -6,12 +6,12 @@ import numpy as np
 import math
 from scipy.integrate import odeint, simps
 
-def wavefn(u0,r,a,b,c,d):
+def wavefn(u0,r,a,b,c,d,yint):
     '''
         Return array of the two odes required to solve quarkonium schrodinger eqn
     '''
     u, v = u0
-    dv = [v, (a/r**2)*u - b*u - (c/r)*u + d*r*u]
+    dv = [v, (a/r**2)*u - b*u + c*u*r**d - yint*u]
     return dv
 
 def sqr(psi):
@@ -35,16 +35,16 @@ def simpson(pdf,psi,dur,r):
 
     return pdf, psi, dur
 
-def psi(n,l,E,u0,alpha,beta,mu,r):
+def psi(n,l,E,u0,cons,d,yint,mu,r):
     '''
         Solves wavefn
     '''
     a = l*(l+1)
-    b = -2*mu*E
-    c = 2*mu*alpha
-    d = 2*mu*beta
+    b = 2*mu*E
+    c = 2*mu*cons
+    ys = 2*mu*yint
 
-    sol = odeint(wavefn,u0,r,args=(a,b,c,d))
+    sol = odeint(wavefn,u0,r,args=(a,b,c,d,ys))
     ur = sol[:,0]
     du = sol[:,1]
 
@@ -88,7 +88,7 @@ def counter(u,du,r):
 
     return nodes, nod_loc_r, nod_loc_u, turns, t_loc_r, t_loc_u
 
-def itera(n,l,e1,e3,u0,alpha,beta,mu,r,step):
+def itera(n,l,e1,e3,u0,cons,d,yint,mu,r,step):
     '''
         Iterates to find ur
     '''
@@ -100,9 +100,9 @@ def itera(n,l,e1,e3,u0,alpha,beta,mu,r,step):
             break
         e2 = (e1+e3)/2
 
-        pr1, u1, v1 = psi(n,l,e1,u0,alpha,beta,mu,r)
-        pr2, u2, v2 = psi(n,l,e2,u0,alpha,beta,mu,r)
-        pr3, u3, v3 = psi(n,l,e3,u0,alpha,beta,mu,r)
+        pr1, u1, v1 = psi(n,l,e1,u0,cons,d,yint,mu,r)
+        pr2, u2, v2 = psi(n,l,e2,u0,cons,d,yint,mu,r)
+        pr3, u3, v3 = psi(n,l,e3,u0,cons,d,yint,mu,r)
 
         n1, nr1, nu1, t1, tr1, tu1 = counter(u1,v1,r)
         n2, nr2, nu2, t2, tr2, tu2 = counter(u2,v2,r)
@@ -115,13 +115,13 @@ def itera(n,l,e1,e3,u0,alpha,beta,mu,r,step):
 #            e1 = e2
 #            q += 1
 #        else: 
-        if n1 == (n-l-1) and t1 == (n-l):
+        if n1 == (n-1) and t1 == (n):
             print "Found iterative solution in %.f iterations" % q
             break 
-        elif n2 == (n-l-1) and t2 == (n-l):
+        elif n2 == (n-1) and t2 == (n):
             print "Found iterative solution in %.f iterations" % q
             break 
-        elif n3 == (n-l-1) and t3 == (n-l):
+        elif n3 == (n-1) and t3 == (n):
             print "Found iterative solution in %.f iterations" % q
             break 
         if t1 != t2 or n1 != n2:
@@ -143,20 +143,22 @@ def itera(n,l,e1,e3,u0,alpha,beta,mu,r,step):
                 e1 = 5*10**odmag
             if delta < 1e-18:
                 print "Energies converged"
-                if n == 1:
-                    e1 = 1e-5
-                    e3 = 1.5e-5
-                elif n == 2:
-                    e1 = 3.3e-6
-                    e3 = 3.5e-5
+                if n == 1 and n == 0:
+                    e1 = 0.2
+                    e3 = 0.5
+                elif n == 1 and n == 1:
+                    e1 = 0.7
+                    e3 = 0.9
+                elif n == 2 and n == 0:
+                    e1 = 1.0
+                    e3 = 1.2
+                elif n == 3:
+                    e1 = 1.2
+                    e3 = 1.5
             else:
                 boom = 0.5*10**odmag 
                 e3 = e1 
                 e1 = e3 - boom
-            if e1 < 0:
-                e1 = -1*e1
-            if e3 < 0:
-                e3 = -1*e3
 
     return pr2, u2, v2, e2
 
@@ -179,3 +181,20 @@ def statement(wvfn,du,n,l,r,E,norm):
     return None
 
 
+def opti(vals,E,n,l,e1,e3,u0,d,mu,r,step):
+    '''
+        Here goes nothing, boys
+    '''
+    c, yint = vals
+    prob, psi, dpsi, Ens = itera(n,l,e1,e3,u0,c,d,yint,mu,r,step)
+    diff = abs(E - Ens)
+    return diff
+
+def opti_2(vals,E,n,l,u0,mu,r,step):
+    '''
+        Here goes nothing, boys
+    '''
+    c, d = vals
+    pr, ur, dpsi = psi(n,l,E,u0,c,d,mu,r)
+    n, nr, nu, t, tr, tu = counter(ur,dpsi,r)
+    return n

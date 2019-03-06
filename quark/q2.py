@@ -40,7 +40,7 @@ def psi(n,l,E,u0,alpha,beta,mu,r):
         Solves wavefn
     '''
     a = l*(l+1)
-    b = -2*mu*E
+    b = 2*mu*E
     c = 2*mu*alpha
     d = 2*mu*beta
 
@@ -115,13 +115,13 @@ def itera(n,l,e1,e3,u0,alpha,beta,mu,r,step):
 #            e1 = e2
 #            q += 1
 #        else: 
-        if n1 == (n-l-1) and t1 == (n-l):
+        if n1 == (n-1) and t1 == (n):
             print "Found iterative solution in %.f iterations" % q
             break 
-        elif n2 == (n-l-1) and t2 == (n-l):
+        elif n2 == (n-1) and t2 == (n):
             print "Found iterative solution in %.f iterations" % q
             break 
-        elif n3 == (n-l-1) and t3 == (n-l):
+        elif n3 == (n-1) and t3 == (n):
             print "Found iterative solution in %.f iterations" % q
             break 
         if t1 != t2 or n1 != n2:
@@ -143,20 +143,22 @@ def itera(n,l,e1,e3,u0,alpha,beta,mu,r,step):
                 e1 = 5*10**odmag
             if delta < 1e-18:
                 print "Energies converged"
-                if n == 1:
-                    e1 = 1e-5
-                    e3 = 1.5e-5
-                elif n == 2:
-                    e1 = 3.3e-6
-                    e3 = 3.5e-5
+                if n == 1 and n == 0:
+                    e1 = 0.3
+                    e3 = 0.5
+                elif n == 1 and n == 1:
+                    e1 = 0.7
+                    e3 = 0.9
+                elif n == 2 and n == 0:
+                    e1 = 1.0
+                    e3 = 1.2
+                elif n == 3:
+                    e1 = 1.2
+                    e3 = 1.5
             else:
                 boom = 0.5*10**odmag 
                 e3 = e1 
                 e1 = e3 - boom
-            if e1 < 0:
-                e1 = -1*e1
-            if e3 < 0:
-                e3 = -1*e3
 
     return pr2, u2, v2, e2
 
@@ -179,3 +181,20 @@ def statement(wvfn,du,n,l,r,E,norm):
     return None
 
 
+def opti(vals,E,n,l,e1,e3,u0,mu,r,step):
+    '''
+        Here goes nothing, boys
+    '''
+    c, d = vals
+    prob, psi, dpsi, Ens = itera(n,l,e1,e3,u0,c,d,mu,r,step)
+    diff = abs(E - Ens)
+    return diff
+
+def opti_2(vals,E,n,l,u0,mu,r,step):
+    '''
+        Here goes nothing, boys
+    '''
+    c, d = vals
+    pr, ur, dpsi = psi(n,l,E,u0,c,d,mu,r)
+    n, nr, nu, t, tr, tu = counter(ur,dpsi,r)
+    return n
