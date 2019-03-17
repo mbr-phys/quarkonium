@@ -311,7 +311,6 @@ def S_hyperfine(alpha, m, r0, E):
     '''
 
     r0_sq = abs(r0)**2
-    print r0_sq
     delta = r0_sq*(8*alpha)/(9*m**2)
 
     e1 = delta

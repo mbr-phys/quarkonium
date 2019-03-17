@@ -53,19 +53,19 @@ plt.title("Solutions of the Hydrogen Electron Radial Wavefunction",fontsize=25)
 plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize=25)
 plt.ylabel("$u_{nl}(r)$",fontsize=25)
 
-#f2 = plt.figure(2,figsize=(8,6))
-#ax1 = f1.add_subplot(111)
-#ax1.tick_params(axis='x', which='major', labelsize=15)
-#ax1.tick_params(axis='y', which='major', labelsize=15)
-#plt.plot(r1, pr1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.1f eV" % En_1)
-#plt.plot(r2, pr20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.2f eV" % En_20)
-#plt.plot(r2, pr21, 'g',label="(n,l) = (2,1), $E_{nl} =$ %.2f eV" % En_21)
-### probs get gridspec in here for separate plots
-#plt.plot((r2[0],r2[-1]),(0,0),'grey')
-#
-#plt.legend(loc=1, fontsize=25)
-#plt.title("Probability Densities of the Hydrogen Electron Radial Wavefunction",fontsize=25)
-#plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize=25)
-#plt.ylabel("$|u_{nl}(r)|^2$",fontsize=25)
+f2 = plt.figure(2,figsize=(8,6))
+ax1 = f1.add_subplot(111)
+ax1.tick_params(axis='x', which='major', labelsize=15)
+ax1.tick_params(axis='y', which='major', labelsize=15)
+plt.plot(r1, pr1, 'b',label="(n,l) = (1,0), $E_{nl} =$ %.1f eV" % En1)
+plt.plot(r2, pr20, 'r',label="(n,l) = (2,0), $E_{nl} =$ %.2f eV" % En20)
+plt.plot(r2, pr21, 'g',label="(n,l) = (2,1), $E_{nl} =$ %.2f eV" % En21)
+## probs get gridspec in here for separate plots
+plt.plot((r2[0],r2[-1]),(0,0),'grey')
+
+plt.legend(loc=1, fontsize=25)
+plt.title("Probability Densities of the Hydrogen Electron Radial Wavefunction",fontsize=25)
+plt.xlabel("Radial Distance, $MeV^{-1}$",fontsize=25)
+plt.ylabel("$|u_{nl}(r)|^2$",fontsize=25)
 
 plt.show()

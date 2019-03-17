@@ -11,17 +11,17 @@ r1 = np.linspace(0.00001, 15, 1000)
 
 step1 = r1[1] - r1[0] #step size for normalisation
 
-m1 = 1.34
-m2 = 1.34
+m1 = 4.18
+m2 = 4.18
 invmu = 1/m1 + 1/m2
 mu = 1/invmu
-alpha = 0.4*4/3
+alpha = 0.28*4/3
 
-E = 3.068 - m1 - m2
+E = 9.445 - m1 - m2
 
 beta1 = 0.1
 beta2 = 0.5
-beta3 = 0.3
+beta3 = 1.0
 
 n = 1
 l = 0
