@@ -4,7 +4,7 @@ import math
 from scipy.integrate import odeint, simps
 import matplotlib.pyplot as plt
 from qfns import S_hyperfine
-from qcd import wavefn, psi, counter, itera, sqr, simpson, statement
+from q2 import wavefn, psi, counter, itera, sqr, simpson, statement
 
 u0 = [0, 1] #array of u and du/dr vals at 0
 
@@ -24,10 +24,10 @@ mc = 1.34
 invmu = 1/mc + 1/mc
 mu = 1/invmu
 alpha_S = 0.4
+alpha = 0.4*4/3
 
-c = 7.641
-d = 0.1
-yint = 8.064
+beta1 = 0.195
+beta2 = 0.19512
 
 E1 = 0.3
 E2 = 0.5
@@ -45,15 +45,15 @@ Ep1 = 1.3
 Ep2 = 1.55
 Ep3 = 1.8
 
-E31 = 1.45
+E31 = 1.5
 E32 = 1.4
-E33 = 2.0
+E33 = 1.6
 
-pr1, u1, du1, E1 = itera(1, 0, E1, E3, u0, c, d, yint, mu, r1, step1)
-pr11, u11, du11, E11 = itera(1, 1, E11, E13, u0, c, d, yint, mu, r2, step2)
-pr20, u20, du20, E20 = itera(2, 0, E01, E03, u0, c, d, yint, mu, r3, step3)
-pr21, u21, du21, E21 = itera(2, 1, Ep1, Ep3, u0, c, d, yint, mu, r4, step4)
-pr30, u30, du30, E30 = itera(3, 0, E31, E33, u0, c, d, yint, mu, r5, step5)
+pr1, u1, du1, E1 = itera(1, 0, E1, E3, u0, alpha, beta1, mu, r1, step1)
+pr11, u11, du11, E11 = itera(1, 1, E11, E13, u0, alpha, beta1, mu, r2, step2)
+pr20, u20, du20, E20 = itera(2, 0, E01, E03, u0, alpha, beta1, mu, r3, step3)
+pr21, u21, du21, E21 = itera(2, 1, Ep1, Ep3, u0, alpha, beta1, mu, r4, step4)
+pr30, u30, du30, E30 = itera(3, 0, E31, E33, u0, alpha, beta1, mu, r5, step5)
 
 norm = 1
 statement(u1,du1,1,0,r1,E1,norm)
@@ -88,8 +88,8 @@ m30 = 2*mc + E30
 
 f1 = plt.figure(1,figsize=(8,6))
 ax = f1.add_subplot(111)
-ax.tick_params(axis='x', which='major', labelsize=25)
-ax.tick_params(axis='y', which='major', labelsize=25)
+ax.tick_params(axis='x', which='major', labelsize=15)
+ax.tick_params(axis='y', which='major', labelsize=15)
 plt.plot(r1, u1, 'b',label="(n,l) = (1,0), $M_{nl} =$ %.3f GeV/$c^2$" % m10)
 plt.plot(r2, u11, 'g',label="(n,l) = (1,1), $M_{nl} =$ %.3f GeV/$c^2$" % m11)
 plt.plot(r3, u20, 'r',label="(n,l) = (2,0), $M_{nl} =$ %.3f GeV/$c^2$" % m20)
@@ -98,8 +98,8 @@ plt.plot(r5, u30, 'cyan',label="(n,l) = (3,0), $M_{nl} =$ %.3f GeV/$c^2$" % m30)
 ### probs get gridspec in here for separate plots
 plt.plot((r5[0],r5[-1]),(0,0),'grey')
 
-plt.legend(loc=1, fontsize=20)
-plt.title("Solutions of the Charmonium Radial Wavefunction Using $V_2$",fontsize=25)
+plt.legend(loc=1, fontsize=15)
+plt.title("Solutions of the Charmonium Wavefunction",fontsize=25)
 plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize=25)
 plt.ylabel("$u_{nl}(r)$",fontsize=25)
 
@@ -112,14 +112,15 @@ plt.ylabel("$u_{nl}(r)$",fontsize=25)
 #plt.plot(r3, pr20, 'r',label="(n,l) = (2,0), $M_{nl} =$ %.3f GeV/$c^2$" % m20)
 #plt.plot(r4, pr21, 'purple',label="(n,l) = (2,1), $M_{nl} =$ %.3f GeV/$c^2$" % m21)
 #plt.plot(r5, pr30, 'cyan',label="(n,l) = (3,0), $M_{nl} =$ %.3f GeV/$c^2$" % m30)
-### probs get gridspec in here for separate plots
+## probs get gridspec in here for separate plots
 #plt.plot((r2[0],r2[-1]),(0,0),'grey')
-#
+
 #plt.legend(loc=1, fontsize=25)
 #plt.title("Probability Densities of Charmonium Wavefunction",fontsize=25)
 #plt.xlabel("Radial Distance, $GeV^{-1}$",fontsize=25)
 #plt.ylabel("$|u_{nl}(r)|^2$",fontsize=25)
 
+#f3 = plt.figure(3,figsize=(8,6))
 #plt.plot((0,1),(3.068,3.068),'blue')
 #plt.plot((0,1),(M1_1,M1_1),'blue')
 #plt.plot((0,1),(M1_3,M1_3),'blue')
@@ -138,4 +139,3 @@ plt.ylabel("$u_{nl}(r)$",fontsize=25)
 #plt.plot((2,3),(4.024,4.024),'red')
 
 plt.show()
-

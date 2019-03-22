@@ -11,13 +11,12 @@ r1 = np.linspace(0.00001, 15, 1000)
 
 step1 = r1[1] - r1[0] #step size for normalisation
 
-m1 = 1.34
-m2 = 1.34
-invmu = 1/m1 + 1/m2
+mc = 1.27
+invmu = 1/mc + 1/mc
 mu = 1/invmu
 alpha = 0.4*4/3
 
-E = 3.068 - m1 - m2
+E = 3.068 - 2*mc
 
 beta1 = 0.1
 beta2 = 0.5
@@ -27,7 +26,6 @@ n = 1
 l = 0
 
 pr1, sol1, du1, beta1 = itera(n, l, E, u0, alpha, beta1, beta3, mu, r1, step1)
-
 
 norm = 1
 statement(sol1,du1,n,l,r1,beta1,norm)
