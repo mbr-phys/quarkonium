@@ -1,6 +1,7 @@
 # Quarkonium Project
 
 3rd Year Physics Problem Solving computing project to solve S.E. for quarkonium systems
+_there's so much more you can do here than I did..._
 
 ## Project Plan
 
